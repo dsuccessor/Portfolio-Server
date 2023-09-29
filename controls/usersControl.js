@@ -104,8 +104,10 @@ const bulkAddUsers = {
 
     try {
       newKayCadUsers.map(async (user) => {
-        const { surname, otherName, email, passport, password, role } = user;
+        const { userId, surname, otherName, email, passport, password, role } =
+          user;
         await userModel.create({
+          userId,
           surname,
           otherName,
           email,

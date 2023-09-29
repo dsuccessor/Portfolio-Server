@@ -1,6 +1,5 @@
 const adminModel = require("../models/adminModel");
 const {
-  GraphQLSchema,
   GraphQLString,
   GraphQLObjectType,
   GraphQLList,
@@ -17,7 +16,7 @@ const adminTable = new GraphQLObjectType({
   description: "admin Table",
   fields: () => ({
     id: { type: GraphQLID },
-    adminId: { type: GraphQLInt },
+    // adminId: { type: GraphQLInt },
     surname: { type: GraphQLString },
     otherName: { type: GraphQLString },
     email: { type: GraphQLString },
@@ -47,7 +46,7 @@ const convertDate = (data) => {
       email,
       password,
       passport,
-      adminId,
+      // adminId,
       adminType,
       createdAt,
       updatedAt,
@@ -61,7 +60,7 @@ const convertDate = (data) => {
       email,
       password,
       passport,
-      adminId,
+      // adminId,
       adminType,
       createdAt: created,
       updatedAt: updated,

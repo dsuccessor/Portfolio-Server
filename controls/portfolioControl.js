@@ -1,13 +1,10 @@
 const portfolioModel = require("../models/portfolioModel");
 const {
-  GraphQLSchema,
   GraphQLString,
   GraphQLObjectType,
   GraphQLList,
   GraphQLNonNull,
-  GraphQLInt,
   GraphQLID,
-  GraphQLEnumType,
   GraphQLError,
   GraphQLInputObjectType,
 } = require("graphql");
@@ -117,7 +114,7 @@ const portfolioTable = new GraphQLObjectType({
   description: "portfolio Table",
   fields: () => ({
     id: { type: GraphQLID },
-    portfolioId: { type: GraphQLInt },
+    // portfolioId: { type: GraphQLInt },
     languages: { type: GraphQLList(languages) },
     projects: { type: GraphQLList(projects) },
     skills: { type: GraphQLList(skills) },
@@ -128,7 +125,7 @@ const portfolioTable = new GraphQLObjectType({
       type: GraphQLString,
       resolve: (portfolio) => {
         console.log(portfolio);
-        return portfolio.portfolioId != null ? "Success" : "Failed";
+        return portfolio.id != null ? "Success" : "Failed";
       },
     },
   }),
@@ -143,7 +140,7 @@ const convertDate = (data) => {
       projects,
       skills,
       medias,
-      portfolioId,
+      // portfolioId,
       createdAt,
       updatedAt,
     } = item;
@@ -155,7 +152,7 @@ const convertDate = (data) => {
       projects,
       skills,
       medias,
-      portfolioId,
+      // portfolioId,
       createdAt: created,
       updatedAt: updated,
     };

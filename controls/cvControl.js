@@ -1,7 +1,6 @@
 const cvModel = require("../models/adminModel");
 
 const {
-  GraphQLSchema,
   GraphQLString,
   GraphQLObjectType,
   GraphQLList,

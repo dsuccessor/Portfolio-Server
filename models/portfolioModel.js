@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
-const autoIncrement = require("mongoose-auto-increment");
-autoIncrement.initialize(mongoose.connection);
+// const autoIncrement = require("mongoose-auto-increment");
+// autoIncrement.initialize(mongoose.connection);
 
 const portfolioSchema = new mongoose.Schema(
   {
-    portfolioId: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+    // portfolioId: {
+    //   type: Number,
+    //   required: true,
+    //   unique: true,
+    // },
     languages: [
       {
         name: {
@@ -130,12 +130,12 @@ const portfolioSchema = new mongoose.Schema(
   }
 );
 
-portfolioSchema.plugin(autoIncrement.plugin, {
-  model: "portfolio",
-  field: "portfolioId",
-  startAt: 10001,
-  incrementBy: 1,
-});
+// portfolioSchema.plugin(autoIncrement.plugin, {
+//   model: "portfolio",
+//   field: "portfolioId",
+//   startAt: 10001,
+//   incrementBy: 1,
+// });
 
 const portfolioModel = mongoose.model("portfolio", portfolioSchema);
 

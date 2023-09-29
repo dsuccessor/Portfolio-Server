@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
-const autoIncrement = require("mongoose-auto-increment");
-autoIncrement.initialize(mongoose.connection);
+// const autoIncrement = require("mongoose-auto-increment");
+// autoIncrement.initialize(mongoose.connection);
 
 const languageSchema = new mongoose.Schema(
   {
-    languageId: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+    // languageId: {
+    //   type: Number,
+    //   required: true,
+    //   unique: true,
+    // },
     name: {
       type: String,
       required: true,
@@ -38,11 +38,11 @@ const languageSchema = new mongoose.Schema(
 
 const projectSchema = new mongoose.Schema(
   {
-    projectId: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+    // projectId: {
+    //   type: Number,
+    //   required: true,
+    //   unique: true,
+    // },
     name: {
       type: String,
       required: true,
@@ -74,11 +74,11 @@ const projectSchema = new mongoose.Schema(
 
 const skillSchema = new mongoose.Schema(
   {
-    skillId: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+    // skillId: {
+    //   type: Number,
+    //   required: true,
+    //   unique: true,
+    // },
     name: {
       type: String,
       required: true,
@@ -107,11 +107,11 @@ const skillSchema = new mongoose.Schema(
 
 const mediaSchema = new mongoose.Schema(
   {
-    mediaId: {
-      type: Number,
-      required: true,
-      unique: true,
-    },
+    // mediaId: {
+    //   type: Number,
+    //   required: true,
+    //   unique: true,
+    // },
     name: {
       type: String,
       required: true,
@@ -139,33 +139,33 @@ const mediaSchema = new mongoose.Schema(
   }
 );
 
-languageSchema.plugin(autoIncrement.plugin, {
-  model: "language",
-  field: "languageId",
-  startAt: 10001,
-  incrementBy: 1,
-});
+// languageSchema.plugin(autoIncrement.plugin, {
+//   model: "language",
+//   field: "languageId",
+//   startAt: 10001,
+//   incrementBy: 1,
+// });
 
-projectSchema.plugin(autoIncrement.plugin, {
-  model: "project",
-  field: "projectId",
-  startAt: 10001,
-  incrementBy: 1,
-});
+// projectSchema.plugin(autoIncrement.plugin, {
+//   model: "project",
+//   field: "projectId",
+//   startAt: 10001,
+//   incrementBy: 1,
+// });
 
-skillSchema.plugin(autoIncrement.plugin, {
-  model: "skill",
-  field: "skillId",
-  startAt: 10001,
-  incrementBy: 1,
-});
+// skillSchema.plugin(autoIncrement.plugin, {
+//   model: "skill",
+//   field: "skillId",
+//   startAt: 10001,
+//   incrementBy: 1,
+// });
 
-mediaSchema.plugin(autoIncrement.plugin, {
-  model: "media",
-  field: "mediaId",
-  startAt: 10001,
-  incrementBy: 1,
-});
+// mediaSchema.plugin(autoIncrement.plugin, {
+//   model: "media",
+//   field: "mediaId",
+//   startAt: 10001,
+//   incrementBy: 1,
+// });
 
 const languageModel = mongoose.model("language", languageSchema);
 const projectModel = mongoose.model("project", projectSchema);

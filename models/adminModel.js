@@ -1,13 +1,13 @@
 const mongoose = require("mongoose");
-const autoIncrement = require("mongoose-auto-increment");
-autoIncrement.initialize(mongoose.connection);
+// const autoIncrement = require("mongoose-auto-increment");
+// autoIncrement.initialize(mongoose.connection);
 
 const adminSchema = new mongoose.Schema(
   {
-    adminId: {
-      type: Number,
-      required: true,
-    },
+    // adminId: {
+    //   type: Number,
+    //   required: true,
+    // },
     surname: {
       type: String,
       required: true,
@@ -48,12 +48,12 @@ const adminSchema = new mongoose.Schema(
   }
 );
 
-adminSchema.plugin(autoIncrement.plugin, {
-  model: "admin",
-  field: "adminId",
-  startAt: 10001,
-  incrementBy: 395,
-});
+// adminSchema.plugin(autoIncrement.plugin, {
+//   model: "admin",
+//   field: "adminId",
+//   startAt: 10001,
+//   incrementBy: 395,
+// });
 
 const cvModel = mongoose.model("admin", adminSchema);
 

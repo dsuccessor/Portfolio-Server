@@ -1,5 +1,4 @@
 const {
-  GraphQLSchema,
   GraphQLString,
   GraphQLObjectType,
   GraphQLList,
@@ -73,7 +72,7 @@ const languages = new GraphQLObjectType({
   description: "Languages Table",
   fields: () => ({
     id: { type: GraphQLID },
-    languageId: { type: GraphQLInt },
+    // languageId: { type: GraphQLInt },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
     logo: { type: GraphQLString },
@@ -89,7 +88,7 @@ const projects = new GraphQLObjectType({
   description: "Projects Table",
   fields: () => ({
     id: { type: GraphQLID },
-    projectId: { type: GraphQLInt },
+    // projectId: { type: GraphQLInt },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
     flyer: { type: GraphQLString },
@@ -107,7 +106,7 @@ const skills = new GraphQLObjectType({
   description: "Skills Table ",
   fields: () => ({
     id: { type: GraphQLID },
-    skillId: { type: GraphQLInt },
+    // skillId: { type: GraphQLInt },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
     logo: { type: GraphQLString },
@@ -123,7 +122,7 @@ const medias = new GraphQLObjectType({
   description: "Medias Table",
   fields: () => ({
     id: { type: GraphQLID },
-    mediaId: { type: GraphQLInt },
+    // mediaId: { type: GraphQLInt },
     name: { type: GraphQLString },
     handle: { type: GraphQLString },
     logo: { type: GraphQLString },
@@ -138,10 +137,10 @@ const convertDate = (data) => {
   data.map((item) => {
     const {
       id,
-      languageId,
-      projectId,
-      mediaId,
-      skillId,
+      // languageId,
+      // projectId,
+      // mediaId,
+      // skillId,
       name,
       description,
       handle,
@@ -157,10 +156,10 @@ const convertDate = (data) => {
     const updated = JSON.stringify(updatedAt).split("T")[0];
     const newObj = {
       id,
-      languageId,
-      projectId,
-      mediaId,
-      skillId,
+      // languageId,
+      // projectId,
+      // mediaId,
+      // skillId,
       name,
       description,
       handle,

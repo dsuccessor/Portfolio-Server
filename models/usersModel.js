@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
-const autoIncrement = require("mongoose-auto-increment");
-autoIncrement.initialize(mongoose.connection);
+// const autoIncrement = require("mongoose-auto-increment");
+// autoIncrement.initialize(mongoose.connection);
 
 const userSchema = new mongoose.Schema(
   {
@@ -48,12 +48,12 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.plugin(autoIncrement.plugin, {
-  model: "user",
-  field: "userId",
-  startAt: 10001,
-  incrementBy: 395,
-});
+// userSchema.plugin(autoIncrement.plugin, {
+//   model: "user",
+//   field: "userId",
+//   startAt: 10001,
+//   incrementBy: 395,
+// });
 
 const userModel = mongoose.model("user", userSchema);
 
