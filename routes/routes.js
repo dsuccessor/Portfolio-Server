@@ -1,6 +1,7 @@
 const { getCvDb, postToCvDb } = require("../controls/cvControl");
 
 const { bulkAddUsers } = require("../controls/usersControl");
+const { validateUser } = require("../controls/userLogin");
 
 const {
   getAdminByEmail,
@@ -85,6 +86,7 @@ const rootQuery = new GraphQLObjectType({
   name: "fetchEndpoints",
   description: "Enpoints for fetching datas",
   fields: () => ({
+    validateUser,
     bulkAddUsers,
     getAdminByEmail,
     getAdminById,

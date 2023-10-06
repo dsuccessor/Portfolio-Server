@@ -63,8 +63,11 @@ const convertDate = (data) => {
       updatedAt,
       userId,
     } = item;
-    const created = JSON.stringify(createdAt).split("T")[0];
-    const updated = JSON.stringify(updatedAt).split("T")[0];
+
+    const created = createdAt?.toLocaleDateString();
+    const updated = updatedAt?.toLocaleDateString();
+    // const created = JSON.stringify(createdAt).split("T")[0];
+    // const updated = JSON.stringify(updatedAt).split("T")[0];
     const newObj = {
       _id,
       surname,
