@@ -66,8 +66,6 @@ const convertDate = (data) => {
 
     const created = createdAt?.toLocaleDateString();
     const updated = updatedAt?.toLocaleDateString();
-    // const created = JSON.stringify(createdAt).split("T")[0];
-    // const updated = JSON.stringify(updatedAt).split("T")[0];
     const newObj = {
       _id,
       surname,
@@ -141,4 +139,20 @@ const bulkAddUsers = {
   },
 };
 
-module.exports = { bulkAddUsers };
+const getAdminUsers = {
+  type: GraphQLList(users),
+  description: "Api for fetching all admin users",
+  resolve: async (parent, args) => {
+    const result = await userModel?.find({});
+
+    if (result?.length < 1 || result == null) {
+      throw new GraphQLError(`No Admin user record found`);
+    }
+
+    const response = convertDate(result);
+
+    return response;
+  },
+};
+
+module.exports = { bulkAddUsers, getAdminUsers };

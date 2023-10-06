@@ -140,14 +140,11 @@ const convertDate = (data) => {
       projects,
       skills,
       medias,
-      // portfolioId,
       createdAt,
       updatedAt,
     } = item;
     const created = createdAt?.toLocaleDateString();
     const updated = updatedAt?.toLocaleDateString();
-     //JSON.stringify(createdAt).split("T")[0];
-    //JSON.stringify(updatedAt).split("T")[0];
     const newObj = {
       id,
       languages,
