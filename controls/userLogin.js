@@ -26,7 +26,7 @@ const login = new GraphQLObjectType({
   name: "login",
   description: "Users Table",
   fields: () => ({
-    _id: { type: GraphQLID },
+    id: { type: GraphQLID },
     userId: { type: GraphQLInt },
     surname: { type: GraphQLString },
     otherName: { type: GraphQLString },
@@ -42,7 +42,7 @@ const login = new GraphQLObjectType({
 //function to convert date
 const convertDate = (data) => {
   const {
-    _id,
+    id,
     surname,
     otherName,
     email,
@@ -58,7 +58,7 @@ const convertDate = (data) => {
   const updated = updatedAt?.toLocaleDateString();
 
   const newObj = {
-    _id,
+    id,
     surname,
     otherName,
     email,

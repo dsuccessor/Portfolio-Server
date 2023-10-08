@@ -1,4 +1,4 @@
-const adminModel = require("../models/adminModel");
+const adminModel = require("../models/usersModel");
 const {
   GraphQLString,
   GraphQLObjectType,
@@ -11,27 +11,20 @@ const {
 } = require("graphql");
 
 // Admin Table
-const adminTable = new GraphQLObjectType({
+const userTable = new GraphQLObjectType({
   name: "admin",
   description: "admin Table",
   fields: () => ({
     id: { type: GraphQLID },
-    // adminId: { type: GraphQLInt },
+    adminId: { type: GraphQLInt },
     surname: { type: GraphQLString },
     otherName: { type: GraphQLString },
     email: { type: GraphQLString },
     passport: { type: GraphQLString },
     password: { type: GraphQLString },
-    adminType: { type: GraphQLString },
+    role: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
-    message: {
-      type: GraphQLString,
-      resolve: (admin) => {
-        console.log(admin);
-        return admin.userId != null ? "Success" : "Failed";
-      },
-    },
   }),
 });
 
@@ -41,12 +34,13 @@ const convertDate = (data) => {
   data.map((item) => {
     const {
       id,
+      adminId,
       surname,
       otherName,
       email,
       password,
       passport,
-      adminType,
+      role,
       createdAt,
       updatedAt,
     } = item;
@@ -62,8 +56,8 @@ const convertDate = (data) => {
       email,
       password,
       passport,
-      // adminId,
-      adminType,
+      adminId,
+      role,
       createdAt: created,
       updatedAt: updated,
     };
@@ -74,7 +68,7 @@ const convertDate = (data) => {
 
 //Admin Table fetch queries
 const getAdminByEmail = {
-  type: GraphQLList(adminTable),
+  type: GraphQLList(userTable),
   description: "Fetch admin by email address",
   args: {
     email: { type: GraphQLNonNull(GraphQLString) },
@@ -92,7 +86,7 @@ const getAdminByEmail = {
   },
 };
 const getAdminById = {
-  type: adminTable,
+  type: userTable,
   description: "Fetch admin by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
@@ -102,7 +96,7 @@ const getAdminById = {
   },
 };
 const getAdmins = {
-  type: GraphQLList(adminTable),
+  type: GraphQLList(userTable),
   description: "Fetch all admins",
   resolve: async (parent, args) => {
     const result = await adminModel.find();
@@ -122,7 +116,7 @@ const getAdmins = {
 
 //Admin Table mutationa queries
 const addAdmin = {
-  type: adminTable,
+  type: userTable,
   description: "Add an admin",
   args: {
     surname: { type: GraphQLNonNull(GraphQLString) },
@@ -130,9 +124,9 @@ const addAdmin = {
     email: { type: GraphQLNonNull(GraphQLString) },
     passport: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
-    adminType: {
+    role: {
       type: new GraphQLEnumType({
-        name: "addAdminType",
+        name: "addRole",
         values: {
           superAdmin: { value: "Super Admin" },
           admin: { value: "Admin" },
@@ -148,12 +142,12 @@ const addAdmin = {
       email: args.email,
       passport: args.passport,
       password: args.password,
-      adminType: args.adminType,
+      role: args.role,
     };
 
-    const { surname, otherName, email, passport, password, adminType } = args;
+    const { surname, otherName, email, passport, password, role } = args;
 
-    const adminArr = [surname, otherName, email, passport, password, adminType];
+    const adminArr = [surname, otherName, email, passport, password, role];
 
     const emptyArg = adminArr.filter((item) => item === "");
 
@@ -173,7 +167,7 @@ const addAdmin = {
         email,
         passport,
         password,
-        adminType,
+        role,
       });
       if (create) {
         return create;
@@ -184,7 +178,7 @@ const addAdmin = {
   },
 };
 const deleteAdminById = {
-  type: adminTable,
+  type: userTable,
   description: "Delete an admin by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
@@ -194,15 +188,15 @@ const deleteAdminById = {
   },
 };
 const updateAdminById = {
-  type: adminTable,
+  type: userTable,
   description: "Update an admin by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
-    adminType: {
+    role: {
       type: new GraphQLEnumType({
-        name: "updateAdminType",
+        name: "updateRole",
         values: {
           superAdmin: { value: "Super Admin" },
           admin: { value: "Admin" },
@@ -215,7 +209,7 @@ const updateAdminById = {
     const updateRecord = {
       email: args.email,
       password: args.password,
-      adminType: args.adminType,
+      role: args.role,
     };
 
     return adminModel.findByIdAndUpdate(

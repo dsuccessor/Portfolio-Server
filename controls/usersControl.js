@@ -17,7 +17,7 @@ const usersInput = new GraphQLInputObjectType({
   name: "usersInput",
   description: "Users Table",
   fields: () => ({
-    _id: { type: GraphQLID },
+    id: { type: GraphQLID },
     userId: { type: GraphQLInt },
     surname: { type: GraphQLString },
     otherName: { type: GraphQLString },
@@ -34,7 +34,7 @@ const users = new GraphQLObjectType({
   name: "users",
   description: "Users Table",
   fields: () => ({
-    _id: { type: GraphQLID },
+    id: { type: GraphQLID },
     userId: { type: GraphQLInt },
     surname: { type: GraphQLString },
     otherName: { type: GraphQLString },
@@ -53,31 +53,33 @@ const convertDate = (data) => {
   data.map((item) => {
     const {
       _id,
+      userId,
       surname,
       otherName,
       email,
-      passport,
       password,
+      passport,
       role,
       createdAt,
       updatedAt,
-      userId,
     } = item;
 
-    const created = createdAt?.toLocaleDateString();
-    const updated = updatedAt?.toLocaleDateString();
+    const created = new Date(createdAt)?.toLocaleDateString();
+    const updated = new Date(updatedAt)?.toLocaleDateString();
+
     const newObj = {
-      _id,
+      id: _id,
+      userId,
       surname,
       otherName,
       email,
-      passport,
       password,
+      passport,
       role,
       createdAt: created,
       updatedAt: updated,
-      userId,
     };
+
     return (newData = [...newData, newObj]);
   });
   return newData;
@@ -88,9 +90,9 @@ const bulkAddUsers = {
   description: "Add all users from kaycad database",
   resolve: async (parent, args) => {
     // Current Users Record on Portflio Database
-    const portfolioUsers = await userModel.find({}, { email: 1, _id: 0 });
+    const portfolioUsers = await userModel.find({}, { email: 1, id: 1 });
 
-    // Latest Users Record on KayCad Database
+    // All Users Record on KayCad Database
     const kayCadResponse = await server.get("/admin/fetchAll");
     const kayCadUsers = kayCadResponse.data.response;
 
@@ -123,7 +125,8 @@ const bulkAddUsers = {
       );
     } finally {
       if (newKayCadUsers.length > 0) {
-        return newKayCadUsers;
+        const newAdminUsers = convertDate(newKayCadUsers);
+        return newAdminUsers;
       } else if (kayCadUsers.length < 1) {
         throw new GraphQLError(`No user record found on KayCad Database`);
       } else if (newKayCadUsers.length < 1) {
