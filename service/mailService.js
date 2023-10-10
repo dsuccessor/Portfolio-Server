@@ -16,14 +16,15 @@ const sendMail = async (mailSubject, receipentMail, mailContent)=> {
     text: mailContent,
   };
 
- return transporter.sendMail(mailOptions, function (error, info) {
+  transporter.sendMail(mailOptions, function (error, info) {
     if (error) {
       throw new Error(error);
-    } else {
-      console.log("Email Sent");
+    } 
+      console.log("Email Sent succesfully");
       return true;
-    }
   });
+
+  return true
 }
 
 module.exports = { sendMail };

@@ -42,7 +42,7 @@ app.use(cors());
 app.use(
   session({
     secret: 'secretkey',
-    saveUninitialized: true,
+    saveUninitialized: false,
     resave: true,
     cookie: { maxAge: 120000 }, //two minutes
     store: store,
