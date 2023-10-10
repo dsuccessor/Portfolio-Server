@@ -1,5 +1,5 @@
 const { bulkAddUsers, getAdminUsers } = require("../controls/usersControl");
-const { validateUser } = require("../controls/userLogin");
+const { validateUser, passResetReq, resetPassword,  confirmOtp } = require("../controls/userLogin");
 
 const {
   getAdminByEmail,
@@ -84,6 +84,8 @@ const rootQuery = new GraphQLObjectType({
   name: "fetchEndpoints",
   description: "Enpoints for fetching datas",
   fields: () => ({
+    confirmOtp,
+    passResetReq,
     getAdminUsers,
     validateUser,
     bulkAddUsers,
@@ -121,6 +123,7 @@ const rootMutation = new GraphQLObjectType({
   name: "postEndpoints",
   description: "Endpoints for posting datas",
   fields: () => ({
+    resetPassword,
     addAdmin,
     deleteAdminById,
     updateAdminById,
@@ -170,9 +173,10 @@ const schema = new GraphQLSchema({
   mutation: rootMutation,
 });
 
-const portfolioRoute = expressGraphQL({
+const portfolioRoute = expressGraphQL(req => ({
   schema: schema,
+  context: {req},
   graphiql: true,
-});
+}));
 
-module.exports = portfolioRoute;
+module.exports = {portfolioRoute};
