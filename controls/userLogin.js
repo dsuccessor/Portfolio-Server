@@ -129,10 +129,11 @@ const passResetReq = {
     console.log(req.session.otp)
     req.session.save();
     const optSent = await sendMail("Password Reset OTP", args?.email, JSON.stringify(otp))
-    if (optSent === true){
-      const response = convertDate(result);
-      return response;
-    }
+    console.log(optSent);
+    // if (optSent === true){
+    //   const response = convertDate(result);
+    //   return response;
+    // }
   },
 };
 

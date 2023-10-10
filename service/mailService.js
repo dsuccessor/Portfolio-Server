@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 
-const sendMail = async (mailSubject, receipentMail, mailContent)=> {
+const sendMail = async (mailSubject, receipentMail, mailContent) => {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
@@ -16,15 +16,19 @@ const sendMail = async (mailSubject, receipentMail, mailContent)=> {
     text: mailContent,
   };
 
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      throw new Error(error);
-    } 
-      console.log("Email Sent succesfully");
-      return true;
+  await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(mailOptions, (err, response) => {
+      if (err) {
+        reject(err);
+        console.log("Failed to deliver the mail");
+      } else {
+        resolve(response);
+        console.log("Mail delivered");
+      }
+    });
   });
 
-  return true
 }
 
 module.exports = { sendMail };
