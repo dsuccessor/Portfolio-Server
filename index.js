@@ -6,8 +6,8 @@ dotenv.config();
 const cors = require("cors");
 const app = express();
 const { portfolioRoute } = require("./routes/routes");
-const session = require("express-session");
-const mongoDbStore = require("connect-mongodb-session")(session);
+// const session = require("express-session");
+// const mongoDbStore = require("connect-mongodb-session")(session);
 
 // Mongoose configuration
 mongoose.connect(process.env.MONGO_DB, (error, response) => {
@@ -19,34 +19,36 @@ mongoose.connect(process.env.MONGO_DB, (error, response) => {
 });
 
 // Mongodb Store
-const store = new mongoDbStore(
-  {
-    uri: process.env.MONGO_DB,
-    collection: 'passResetOtp'
-  },
-  //  ((error) => console.log(`Unable to start mongoDBStore ${error}`))
-)
+// const store = new mongoDbStore(
+//   {
+//     uri: process.env.MONGO_DB,
+//     collection: 'passResetOtp'
+//   },
+//   //  ((error) => console.log(`Unable to start mongoDBStore ${error}`))
+// )
 
-store.on('connection', (result) =>
-  console.log(`Connected to mongodb store ${result}`))
+// store.on('connection', (result) =>
+//   console.log(`Connected to mongodb store ${result}`))
 
-store.on('error', (err) =>
-  console.log(`Connected to mongodb store ${err}`))
+// store.on('error', (err) =>
+//   console.log(`Connected to mongodb store ${err}`))
 
+// var mySession = {
+//   secret: 'secretkey',
+//   saveUninitialized: false,
+//   resave: false,
+//   cookie: { maxAge: 120000, sameSite: 'none'},
+//   store: store,
+// }
 
 
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cors());
-app.use(
-  session({
-    secret: 'secretkey',
-    saveUninitialized: false,
-    resave: true,
-    cookie: { maxAge: 120000 }, //two minutes
-    store: store,
-  }))
+
+
+// app.use(session(mySession))
 
 // General Endpoint
 app.use("/portfolio", (req, _, next) => {
