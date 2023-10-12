@@ -26,6 +26,7 @@
     "express-session": "^1.17.3",
     "googleapis": "^118.0.0",
     "graphql": "^15.8.0",
+    "jsonc": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^6.8.3",
     "multer": "^1.4.5-lts.1",
