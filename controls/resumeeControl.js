@@ -700,24 +700,23 @@ const updateObjectiveById = {
   description: "Update an objective by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
-    version: { type: GraphQLNonNull(GraphQLString) },
-    summary: { type: GraphQLNonNull(GraphQLString) },
-    logo: { type: GraphQLNonNull(GraphQLString) },
+    version: { type: GraphQLString },
+    summary: { type: GraphQLString },
+    logo: { type: GraphQLString },
   },
   resolve: async (parent, args) => {
-    const { id, version, summary, logo } = args;
 
-    const objArr = [id, version, summary, logo];
+    const updateRecord = Object.keys(args)
+.filter((key) => args[key] != null && args[key] !== "")
+.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
 
-    const emptyArg = objArr.filter((item) => item?.length < 1);
+const recordCount = Object.keys(updateRecord);
 
-    if (emptyArg.length > 0) {
+    if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
-        `${emptyArg.length} empty field(s), Kindly provide the missing update value(s)`
+        `No update data provided, Kindly provide atleast one data to update `
       );
     }
-
-    const updateRecord = { version, summary, logo };
 
     const result = await objectiveModel.findByIdAndUpdate(
       args.id,
@@ -800,26 +799,25 @@ const updateEducationById = {
   description: "Update an education by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
-    school: { type: GraphQLNonNull(GraphQLString) },
-    period: { type: GraphQLNonNull(GraphQLString) },
-    qualification: { type: GraphQLNonNull(GraphQLString) },
-    course: { type: GraphQLNonNull(GraphQLList(GraphQLString)) },
-    grade: { type: GraphQLNonNull(GraphQLString) },
+    school: { type: GraphQLString },
+    period: { type: GraphQLString },
+    qualification: { type: GraphQLString },
+    course: { type: GraphQLString },
+    grade: { type: GraphQLString },
   },
   resolve: async (parent, args) => {
-    const { id, school, period, qualification, course, grade } = args;
+   
+    const updateRecord = Object.keys(args)
+.filter((key) => args[key] != null && args[key] !== "")
+.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
 
-    const eduArr = [id, school, period, qualification, course, grade];
+const recordCount = Object.keys(updateRecord);
 
-    const emptyArg = eduArr.filter((item) => item?.length < 1);
-
-    if (emptyArg.length > 0) {
+    if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
-        `${emptyArg.length} empty field(s), Kindly provide the missing update value(s)`
+        `No update data provided, Kindly provide atleast one data to update `
       );
     }
-
-    const updateRecord = { school, period, qualification, course, grade };
 
     const result = await educationModel.findByIdAndUpdate(
       args.id,
@@ -900,30 +898,23 @@ const updateExperienceById = {
   description: "Update an experience by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
-    organization: { type: GraphQLNonNull(GraphQLString) },
-    role: { type: GraphQLNonNull(GraphQLString) },
-    position: { type: GraphQLNonNull(GraphQLString) },
-    period: { type: GraphQLNonNull(GraphQLString) },
+    organization: { type: GraphQLString },
+    role: { type: GraphQLString },
+    position: { type: GraphQLString },
+    period: { type: GraphQLString },
   },
   resolve: async (parent, args) => {
-    const { id, organization, role, position, period } = args;
+    const updateRecord = Object.keys(args)
+.filter((key) => args[key] != null && args[key] !== "")
+.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
 
-    const expArr = [id, organization, role, position, period];
+const recordCount = Object.keys(updateRecord);
 
-    const emptyArg = expArr.filter((item) => item?.length < 1);
-
-    if (emptyArg.length > 0) {
+    if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
-        `${emptyArg.length} empty field(s), Kindly provide the missing update value(s)`
+        `No update data provided, Kindly provide atleast one data to update `
       );
     }
-
-    const updateRecord = {
-      organization,
-      role,
-      position,
-      period,
-    };
 
     const result = await experienceModel.findByIdAndUpdate(
       args.id,
@@ -1006,30 +997,24 @@ const updateAwardById = {
   description: "Update an award by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
-    organization: { type: GraphQLNonNull(GraphQLString) },
-    award: { type: GraphQLNonNull(GraphQLString) },
-    logo: { type: GraphQLNonNull(GraphQLString) },
-    period: { type: GraphQLNonNull(GraphQLString) },
+    organization: { type: GraphQLString },
+    award: { type: GraphQLString },
+    logo: { type: GraphQLString },
+    period: { type: GraphQLString },
   },
   resolve: async (parent, args) => {
-    const { id, organization, award, logo, period } = args;
-
-    const awardArr = [id, organization, award, logo, period];
-
-    const emptyArg = awardArr.filter((item) => item?.length < 1);
-
-    if (emptyArg.length > 0) {
-      throw new GraphQLError(
-        `${emptyArg.length} empty field(s), Kindly provide the missing update value(s)`
-      );
-    }
-
-    const updateRecord = {
-      organization,
-      award,
-      logo,
-      period,
-    };
+    const updateRecord = Object.keys(args)
+    .filter((key) => args[key] != null && args[key] !== "")
+    .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
+    
+    const recordCount = Object.keys(updateRecord);
+    
+        if (recordCount.length < 2 || recordCount === null) {
+          throw new GraphQLError(
+            `No update data provided, Kindly provide atleast one data to update `
+          );
+        }
+    
 
     const result = await experienceModel.findByIdAndUpdate(
       args.id,
@@ -1204,30 +1189,23 @@ const updateCertificationById = {
   description: "Update a certification by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
-    programme: { type: GraphQLNonNull(GraphQLString) },
-    period: { type: GraphQLNonNull(GraphQLString) },
-    certificate: { type: GraphQLNonNull(GraphQLString) },
-    certification: { type: GraphQLNonNull(GraphQLString) },
+    programme: { type: GraphQLString },
+    period: { type: GraphQLString },
+    certificate: { type: GraphQLString },
+    certification: { type: GraphQLString },
   },
   resolve: async (parent, args) => {
-    const { id, programme, period, certificate, certification } = args;
+    const updateRecord = Object.keys(args)
+.filter((key) => args[key] != null && args[key] !== "")
+.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
 
-    const certArr = [id, programme, period, certificate, certification];
+const recordCount = Object.keys(updateRecord);
 
-    const emptyArg = certArr.filter((item) => item?.length < 1);
-
-    if (emptyArg.length > 0) {
+    if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
-        `${emptyArg.length} empty field(s), Kindly provide the missing update value(s)`
+        `No update data provided, Kindly provide atleast one data to update `
       );
     }
-
-    const updateRecord = {
-      programme,
-      period,
-      certificate,
-      certification,
-    };
 
     const result = await certificationModel.findByIdAndUpdate(
       args.id,
@@ -1303,26 +1281,22 @@ const updateHobbyById = {
   description: "Update a hobby by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
-    name: { type: GraphQLNonNull(GraphQLString) },
-    description: { type: GraphQLNonNull(GraphQLString) },
+    name: { type: GraphQLString },
+    description: { type: GraphQLString },
   },
   resolve: async (parent, args) => {
-    const { id, name, description } = args;
-
-    const hobbyArr = [id, name, description];
-
-    const emptyArg = hobbyArr.filter((item) => item?.length < 1);
-
-    if (emptyArg.length > 0) {
-      throw new GraphQLError(
-        `${emptyArg.length} empty field(s), Kindly provide the missing update value(s)`
-      );
-    }
-
-    const updateRecord = {
-      name,
-      description,
-    };
+    const updateRecord = Object.keys(args)
+    .filter((key) => args[key] != null && args[key] !== "")
+    .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
+    
+    const recordCount = Object.keys(updateRecord);
+    
+        if (recordCount.length < 2 || recordCount === null) {
+          throw new GraphQLError(
+            `No update data provided, Kindly provide atleast one data to update `
+          );
+        }
+    
 
     const result = await hobby.findByIdAndUpdate(
       args.id,
