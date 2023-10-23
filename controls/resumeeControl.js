@@ -20,6 +20,7 @@ const {
   hobbyModel,
   cvlanguageModel,
 } = require("../models/resumeeModel");
+const { loginAuth } = require("../middleware/auth");
 
 const dateScalar = new GraphQLScalarType({
   name: "Date",
@@ -361,7 +362,8 @@ const getObjectiveById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await objectiveModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -379,7 +381,8 @@ const getObjectiveById = {
 const getObjectives = {
   type: GraphQLList(objective),
   description: "Fetch all objectives",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await objectiveModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -402,7 +405,8 @@ const getEducationById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await educationModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -420,7 +424,8 @@ const getEducationById = {
 const getEducations = {
   type: GraphQLList(education),
   description: "Fetch all educations",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await educationModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -443,7 +448,8 @@ const getExperienceById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await experienceModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -461,7 +467,8 @@ const getExperienceById = {
 const getExperiences = {
   type: GraphQLList(experience),
   description: "Fetch all experiences",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await experienceModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -484,7 +491,8 @@ const getAwardById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await awardModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -502,7 +510,8 @@ const getAwardById = {
 const getAwards = {
   type: GraphQLList(award),
   description: "Fetch all awards",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await awardModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -525,7 +534,8 @@ const getCvLanguageById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await cvlanguageModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -543,7 +553,8 @@ const getCvLanguageById = {
 const getCvLanguages = {
   type: GraphQLList(cvLanguage),
   description: "Fetch all Cv Languages",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await cvlanguageModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -566,7 +577,8 @@ const getCertificationById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await certificationModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -586,7 +598,8 @@ const getCertificationById = {
 const getCertifications = {
   type: GraphQLList(certification),
   description: "Fetch all certifications",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await certificationModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -609,7 +622,8 @@ const getHobbyById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await hobbyModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -627,7 +641,8 @@ const getHobbyById = {
 const getHobbies = {
   type: GraphQLList(hobby),
   description: "Fetch all hobbies",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await hobbyModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -653,7 +668,8 @@ const addObjective = {
     summary: { type: GraphQLNonNull(GraphQLString) },
     logo: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { version, summary, logo } = args;
 
     const objArr = [version, summary, logo];
@@ -688,7 +704,8 @@ const deleteObjectiveById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await objectiveModel.findByIdAndDelete(args.id);
     const create = mutationConvertDate(result);
     return create;
@@ -704,8 +721,8 @@ const updateObjectiveById = {
     summary: { type: GraphQLString },
     logo: { type: GraphQLString },
   },
-  resolve: async (parent, args) => {
-
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const updateRecord = Object.keys(args)
 .filter((key) => args[key] != null && args[key] !== "")
 .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
@@ -749,7 +766,8 @@ const addEducation = {
     course: { type: GraphQLNonNull(GraphQLString) },
     grade: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { school, period, qualification, course, grade } = args;
 
     const eduArr = [school, period, qualification, course, grade];
@@ -788,7 +806,8 @@ const deleteEducationById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await educationModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -805,8 +824,8 @@ const updateEducationById = {
     course: { type: GraphQLString },
     grade: { type: GraphQLString },
   },
-  resolve: async (parent, args) => {
-   
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const updateRecord = Object.keys(args)
 .filter((key) => args[key] != null && args[key] !== "")
 .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
@@ -848,7 +867,8 @@ const addExperience = {
     position: { type: GraphQLNonNull(GraphQLString) },
     period: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { organization, role, position, period } = args;
 
     const expArr = [organization, role, position, period];
@@ -886,7 +906,8 @@ const deleteExperienceById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await experienceModel.findByIdAndDelete(args.id);
 
     return mutationConvertDate(result);
@@ -903,7 +924,8 @@ const updateExperienceById = {
     position: { type: GraphQLString },
     period: { type: GraphQLString },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const updateRecord = Object.keys(args)
 .filter((key) => args[key] != null && args[key] !== "")
 .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
@@ -947,7 +969,8 @@ const addAward = {
     logo: { type: GraphQLNonNull(GraphQLString) },
     period: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { organization, award, logo, period } = args;
 
     const awardArr = [organization, award, logo, period];
@@ -985,9 +1008,9 @@ const deleteAwardById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await awardModel.findByIdAndDelete(args.id);
-
     return mutationConvertDate(result);
   },
 };
@@ -1002,7 +1025,8 @@ const updateAwardById = {
     logo: { type: GraphQLString },
     period: { type: GraphQLString },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const updateRecord = Object.keys(args)
     .filter((key) => args[key] != null && args[key] !== "")
     .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
@@ -1043,7 +1067,8 @@ const addCvLanguage = {
     language: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(languageLevel) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { language, level } = args;
 
     const cvLangArr = [language, level];
@@ -1079,7 +1104,8 @@ const deleteCvLanguageById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await cvlanguageModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1093,7 +1119,8 @@ const updateCvLanguageById = {
     language: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(languageLevel) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { id, language, level } = args;
 
     const cvLangArr = [id, language, level];
@@ -1140,7 +1167,8 @@ const addCertification = {
     certificate: { type: GraphQLNonNull(GraphQLString) },
     certification: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { programme, period, certificate, certification } = args;
 
     const certArr = [programme, period, certificate, certification];
@@ -1178,7 +1206,8 @@ const deleteCertificationById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req) 
     const result = await certificationModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1194,7 +1223,8 @@ const updateCertificationById = {
     certificate: { type: GraphQLString },
     certification: { type: GraphQLString },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const updateRecord = Object.keys(args)
 .filter((key) => args[key] != null && args[key] !== "")
 .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
@@ -1234,7 +1264,8 @@ const addHobby = {
     name: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const { name, description } = args;
 
     const hobbyArr = [name, description];
@@ -1270,7 +1301,8 @@ const deleteHobbyById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const result = await hobby.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1284,7 +1316,8 @@ const updateHobbyById = {
     name: { type: GraphQLString },
     description: { type: GraphQLString },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+   await loginAuth(req)
     const updateRecord = Object.keys(args)
     .filter((key) => args[key] != null && args[key] !== "")
     .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});

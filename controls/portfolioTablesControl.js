@@ -15,6 +15,7 @@ const {
   skillModel,
   mediaModel,
 } = require("../models/portfolioTablesModel");
+const { loginAuth } = require("../middleware/auth");
 
 // portflio table languages
 const languagesInput = new GraphQLInputObjectType({
@@ -191,14 +192,20 @@ const getLanguageById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return languageModel.findById(args.id);
   },
 };
 const getLanguages = {
   type: GraphQLList(languages),
   description: "Fetch all languages",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const result = await languageModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -221,14 +228,20 @@ const getProjectById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return projectModel.findById(args.id);
   },
 };
 const getProjects = {
   type: GraphQLList(projects),
   description: "Fetch all projects",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const result = await projectModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -251,14 +264,20 @@ const getSkillById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return skillModel.findById(args.id);
   },
 };
 const getSkills = {
   type: GraphQLList(skills),
   description: "Fetch all skills",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const result = await skillModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -281,14 +300,20 @@ const getMediaById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return mediaModel.findById(args.id);
   },
 };
 const getMedias = {
   type: GraphQLList(medias),
   description: "Fetch all medias",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const result = await mediaModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -315,7 +340,10 @@ const addLanguage = {
     logo: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(levelEnum) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const languageRecord = {
       name: args.name,
       description: args.description,
@@ -356,7 +384,10 @@ const deleteLanguageById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return languageModel.findByIdAndDelete(args.id);
   },
 };
@@ -367,7 +398,10 @@ const updateLanguageById = {
     id: { type: GraphQLNonNull(GraphQLID) },
     level: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const updateRecord = {
       level: args.level,
     };
@@ -393,7 +427,10 @@ const addProject = {
     flyer: { type: GraphQLNonNull(GraphQLString) },
     technologies: { type: GraphQLNonNull(GraphQLList(GraphQLString)) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const projectRecord = {
       name: args.name,
       description: args.description,
@@ -434,7 +471,10 @@ const deleteProjectById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return projectModel.findByIdAndDelete(args.id);
   },
 };
@@ -446,7 +486,10 @@ const updateProjectById = {
     flyer: { type: GraphQLNonNull(GraphQLString) },
     technologies: { type: GraphQLNonNull(GraphQLList(GraphQLString)) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const updateRecord = {
       flyer: args.flyer,
       technologies: args.technologies,
@@ -473,7 +516,10 @@ const addSkill = {
     logo: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(levelEnum) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const skillRecord = {
       name: args.name,
       description: args.description,
@@ -514,7 +560,10 @@ const deleteSkillById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return skillModel.findByIdAndDelete(args.id);
   },
 };
@@ -525,7 +574,10 @@ const updateSkillById = {
     id: { type: GraphQLNonNull(GraphQLID) },
     level: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const updateRecord = {
       level: args.level,
     };
@@ -551,7 +603,10 @@ const addMedia = {
     logo: { type: GraphQLNonNull(GraphQLString) },
     link: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const mediaRecord = {
       name: args.name,
       handle: args.handle,
@@ -592,7 +647,10 @@ const deleteMediaById = {
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     return mediaModel.findByIdAndDelete(args.id);
   },
 };
@@ -604,7 +662,10 @@ const updateMediaById = {
     handle: { type: GraphQLNonNull(GraphQLString) },
     link: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: (parent, args) => {
+  resolve: async (_, args, {req}) => {
+     // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
     const updateRecord = {
       handle: args.handle,
       link: args.link,

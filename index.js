@@ -8,15 +8,19 @@ const app = express();
 const { portfolioRoute } = require("./routes/routes");
 const session = require("express-session");
 const mongoDbStore = require("connect-mongodb-session")(session);
+const clientDomain = process.env.NODE_ENV === 'development' ?
+['http://localhost:3000', 'https://legacy.graphqlbin.com'] : 
+'https://classic-portfolio.vercel.app'
+
+const clientDomainSecurity = process.env.NODE_ENV === 'development' ? false : true
+
 
 // Mongoose configuration
-// var underlyingDb;
 mongoose.connect(process.env.MONGO_DB, (error, response) => {
   if (error) {
     console.log("Unable to connect to Mongoose Server " + error);
   } else {
     console.log("Connected to Mongoose Server " + response);
-    // underlyingDb = response;
   }
 });
 
@@ -26,34 +30,51 @@ const store = new mongoDbStore(
     uri: process.env.MONGO_DB,
     collection: 'passResetOtp'
   },
-  //  ((error) => console.log(`Unable to start mongoDBStore ${error}`))
 )
 
-store.on('connected', (result) =>{
-store.client;
-  console.log(`Connected to mongodb store ${result}`)
+// Store Initialization
+store.on('connected', (result) => {
+  store.client;
+  console.log(`Connected to mongodb store`)
+})
+store.on('error', (err) =>{
+  console.log(`Connected to mongodb store ${err}`)
 })
 
-store.on('error', (err) =>
-  console.log(`Connected to mongodb store ${err}`))
 
 var mySession = {
-  name: 'localhost',
+  name: 'PassResetOTP',
   secret: 'secretkey',
   saveUninitialized: false,
   resave: false,
-  cookie: { maxAge: 120000 },
+  cookie: {
+    httpOnly: clientDomainSecurity, 
+    sameSite: false, 
+    secure: clientDomainSecurity,
+    path: '/',
+    maxAge: 120000,
+  },
   store: store,
 }
+
+var corsOption = { 
+  origin: clientDomain,
+  methods: ['POST', 'PUT', 'DELETE', 'GET', 'UPDATE', 'HEAD', 'PATCH', 'OPTIONS'], 
+  credentials: true, 
+  maxAge: 60000 * 2,
+  optionsSuccessStatus: 200,
+ }
+
+
 // Middleware
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(session(mySession))
-app.use(cors());
+app.use(cors(corsOption));
 
 
 // General Endpoint
-app.use("/portfolio", (req, _, next) => {
+app.use("/portfolio", (req, res, next) => {
   return next()
 }, portfolioRoute);
 
@@ -68,3 +89,4 @@ app.listen(port, (err) => {
 
 
 
+module.exports = store

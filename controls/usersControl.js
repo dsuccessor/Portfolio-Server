@@ -12,6 +12,7 @@ const {
 const userModel = require("../models/usersModel");
 
 const server = require("../middleware/server");
+const { loginAuth } = require("../middleware/auth");
 
 const usersInput = new GraphQLInputObjectType({
   name: "usersInput",
@@ -145,7 +146,12 @@ const bulkAddUsers = {
 const getAdminUsers = {
   type: GraphQLList(users),
   description: "Api for fetching all admin users",
-  resolve: async (parent, args) => {
+  resolve: async (_, args, { req }) => {
+
+      // Validating user Authorization Code
+      const decode = await loginAuth(req);
+      console.log(decode);
+
     const result = await userModel?.find({});
 
     if (result?.length < 1 || result == null) {

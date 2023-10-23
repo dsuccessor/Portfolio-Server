@@ -7,6 +7,7 @@ const {
   GraphQLError,
   GraphQLInputObjectType,
   GraphQLNonNull,
+  Token,
 } = require("graphql");
 
 const userModel = require("../models/usersModel");
@@ -14,6 +15,10 @@ const { sendMail } = require("../service/mailService");
 const otpGenerator = require("otp-generator");
 const { json } = require("express");
 const { default: mongoose } = require("mongoose");
+const { auth, closeSession, createPassResetAuth, createLoginAuth } = require('../middleware/auth');
+const jwt = require("jsonwebtoken");
+const store = require("..");
+const SECRET_KEY = process.env.JWT_KEY;
 
 
 //Login Table Input Structure
@@ -41,6 +46,7 @@ const login = new GraphQLObjectType({
     role: { type: GraphQLString },
     createdAt: { type: GraphQLString },
     updatedAt: { type: GraphQLString },
+    token: { type: GraphQLString },
   }),
 });
 
@@ -94,20 +100,33 @@ const validateUser = {
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args) => {
+  resolve: async (parent, args, { req, res }) => {
+
+    // Checking if user provide the needed info
+    if (!args) {
+      throw new GraphQLError("Email and Password must be provided to Login")
+    }
+
     const result = await userModel?.findOne({
       email: args?.email,
       password: args?.password,
     });
-    // console.log(result);
+
     if (result?.length < 1 || result == null) {
       throw new GraphQLError(
         `Admin with ${args.email} and ${args.password} does not exist, Kindly check and try again`
       );
     }
 
-    const response = convertDate(result);
+    const loginToken = await createLoginAuth(args)
 
+    if (!loginToken) {
+      throw new GraphQLError("Unable to create Authorization key for user")
+    }
+
+    const response = convertDate(result);
+    response.token = loginToken
+    res.header("auth-token", loginToken)
     return response;
   },
 };
@@ -118,10 +137,15 @@ const passResetReq = {
   args: {
     email: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, { req }) => {
+  resolve: async (_, args, { req, res} ) => {
 
-    req.app.locals.sessionID = null
-    req.app.locals.resetSession = true
+    // Checking if user supplied all needed info
+    if (!args) {
+      throw new GraphQLError("Email must be provided")
+    }
+
+    // req.app.locals.sessionID = null
+    // req.app.locals.resetSession = true
 
     const result = await userModel?.findOne({
       email: args?.email,
@@ -133,22 +157,82 @@ const passResetReq = {
       );
     }
 
+    const token = await createPassResetAuth(args)
+
+    if (!token) {
+      throw new GraphQLError("Unable to create Authorization key for user")
+    }
+
     var otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
     req.session.otp = { email: args.email, otp: parseInt(otp) }
     const emailContent = `Dear ${args.email}, \nKindly find below the authorization OTP requested for you password reset. \n${otp}. \nCheers,`
-    
+
     await sendMail("Password Reset OTP", args?.email, emailContent)
     console.log('generate otp & send to mail' + JSON.stringify(req?.session?.otp));
     console.log(req.sessionID)
-
-    req.app.locals.sessionID = req.sessionID
-    req.app.locals.resetSession = false
+    
     const response = convertDate(result);
-
+    response.token = token
+    res.header("auth-token", token)
     return response;
-
   },
 };
+
+const confirmOtp = {
+  type: otpTable,
+  description: "Api to confirm validity of OTP for password reset",
+  args: {
+    email: { type: GraphQLNonNull(GraphQLString) },
+    otp: { type: GraphQLNonNull(GraphQLString) },
+  },
+  resolve: async (_, args, { req }) => {
+
+     // Checking if user provide the needed info
+     if (!args) {
+      throw new GraphQLError("Email and OTP must be provided")
+    }
+
+      // Validating user Authorization Code
+      const decode = await auth(args, req);
+      console.log(decode);
+
+    // Converting OTP from user to Int 
+    var code = { email: args?.email, otp: parseInt(args?.otp) }
+
+    // const sid = req?.app?.locals?.sessionID
+    // const sidValidity = req?.app?.locals?.resetSession
+    // console.log('exp app sessionID ' + sid);
+
+    // if(sid === null && sidValidity === true){
+    //   throw new GraphQLError('OTP Validation Session Expired, Try Again')
+    // }
+
+    // const result = await mongoose.connection.collection('passResetOtp').findOne({_id: sid});
+    // const session = result?.session?.otp;
+    // console.log('otp from mongo ' + otp);
+      // req.app.locals.sessionID = null
+      // req.app.locals.resetSession = true
+
+    const session = req?.session?.otp
+    // Checking if OTP has been initiated
+    if (!session) {
+      throw new GraphQLError('OTP Expired');
+    }
+
+    // Validating OTP and Sending feedback to user
+    if (session?.email === code?.email && session?.otp === code?.otp) {
+      const response = { message: 'OTP Confirmed' }
+      await closeSession(req)
+      console.log(req.session);
+      console.log(response);
+      return response
+    }
+    else {
+      throw new GraphQLError('Invalid OTP, Kindly confirm the OTP sent to your email address and try again');
+    }
+  },
+};
+
 
 const resetPassword = {
   type: login,
@@ -175,48 +259,6 @@ const resetPassword = {
       throw new GraphQLError(
         `Failed to reset ${args.email} password,`);
     }
-  },
-};
-
-const confirmOtp = {
-  type: otpTable,
-  description: "Api to confirm validity of OTP for password reset",
-  args: {
-    email: { type: GraphQLNonNull(GraphQLString) },
-    otp: { type: GraphQLNonNull(GraphQLString) },
-  },
-  resolve: async (_, args, { req }) => {
-
-    var code = { email: args?.email, otp: parseInt(args?.otp) }
-
-    const sid = req?.app?.locals?.sessionID
-    const sidValidity = req?.app?.locals?.resetSession
-    console.log('exp app sessionID ' + sid);
-
-    if(sid === null && sidValidity === true){
-      throw new GraphQLError('OTP Validation Session Expired, Try Again')
-    }
-
-   const result = await mongoose.connection.collection('passResetOtp').findOne({_id: sid});
-  const otp = result?.session?.otp;
-  console.log('otp from mongo ' + otp);
-
-   if (otp == null || otp?.length < 1){
-    req.app.locals.sessionID = null
-    req.app.locals.resetSession = true
-        throw new GraphQLError('OTP Expired');
-      }
-
-      if (otp?.email === code?.email && otp?.otp === code?.otp) {
-        const response = { message: 'OTP Confirmed'}
-        console.log(response);
-        req.app.locals.sessionID = null
-        req.app.locals.resetSession = true
-        return response
-      }
-      else {
-        throw new GraphQLError('Invalid OTP, Kindly confirm the OTP sent to your email address and try again');
-      }
   },
 };
 
