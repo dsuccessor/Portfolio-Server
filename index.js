@@ -14,7 +14,6 @@ const clientDomain = process.env.NODE_ENV === 'development' ?
 
 const clientDomainSecurity = process.env.NODE_ENV === 'development' ? false : true
 
-
 // Mongoose configuration
 mongoose.connect(process.env.MONGO_DB, (error, response) => {
   if (error) {

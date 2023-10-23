@@ -18,7 +18,6 @@ const { default: mongoose } = require("mongoose");
 const { auth, closeSession, createPassResetAuth, createLoginAuth } = require('../middleware/auth');
 const jwt = require("jsonwebtoken");
 const store = require("..");
-const SECRET_KEY = process.env.JWT_KEY;
 
 
 //Login Table Input Structure
@@ -100,7 +99,7 @@ const validateUser = {
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (parent, args, { req, res }) => {
+  resolve: async (_, args, { req, res }) => {
 
     // Checking if user provide the needed info
     if (!args) {

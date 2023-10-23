@@ -1,6 +1,5 @@
 const {GraphQLError } = require("graphql");
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.JWT_KEY;
 
 const auth = async (user, req, next)=> {
 
@@ -12,7 +11,7 @@ const auth = async (user, req, next)=> {
 
     try {
 
-    const decode = jwt.verify(userToken, SECRET_KEY)
+    const decode = jwt.verify(userToken, process.env.JWT_KEY)
 
     if (!decode){
         throw new GraphQLError('Authentication failed, Invalid Authorization Token')
@@ -49,7 +48,7 @@ const loginAuth = async (req, next)=> {
 
     try {
 
-    const decode = jwt.verify(userToken, SECRET_KEY)
+    const decode = jwt.verify(userToken, process.env.JWT_KEY)
 
     if (!decode){
         throw new GraphQLError('Authentication failed, Invalid Authorization Token')
@@ -88,7 +87,7 @@ const closeSession = async (req, next)=>{
 
 const createPassResetAuth = async (args, next)=>{
 
-    const token = jwt.sign(args, SECRET_KEY, { expiresIn: "10m" })
+    const token = jwt.sign(args, process.env.JWT_KEY, { expiresIn: "10m" })
 
     if (!token){
         throw new GraphQLError('Failed to create Authentication Token')
@@ -99,7 +98,7 @@ const createPassResetAuth = async (args, next)=>{
 
 const createLoginAuth = async (args, next)=>{
 
-    const token = jwt.sign(args, SECRET_KEY, { expiresIn: "1h" })
+    const token = jwt.sign(args, process.env.JWT_KEY, { expiresIn: "1h" })
 
     if (!token){
         throw new GraphQLError('Failed to create Authentication Token')
@@ -122,7 +121,7 @@ const createLoginAuth = async (args, next)=>{
 //                 message: 'Invalid Token Format'
 //             })
 //         }
-//         const decode = jwt.verify(token, SECRET_KEY);
+//         const decode = jwt.verify(token, process.env.JWT_KEY);
 //         req.user = decode
 //         next()
 //     } catch (error) {
