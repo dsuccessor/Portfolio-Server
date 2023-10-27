@@ -48,7 +48,7 @@ var mySession = {
   resave: false,
   cookie: {
     httpOnly: false, 
-    sameSite: false, 
+    sameSite: 'none', 
     secure: true,
     path: '/',
     maxAge: 120000,

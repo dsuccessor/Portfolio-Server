@@ -10,7 +10,7 @@ const {
   Token,
 } = require("graphql");
 
-const cookie = require("cookie")
+// const cookie = require("cookie")
 
 const userModel = require("../models/usersModel");
 const { sendMail } = require("../service/mailService");
@@ -176,13 +176,14 @@ const passResetReq = {
     response.token = token
     res.header("auth-token", token)
 
-    res.header('Set-Cookie', cookie.serialize('PassResetOTP', String(req.sessionID), {
-      httpOnly: false, 
-      sameSite: 'none', 
-      secure: true,
-      path: '/',
-      maxAge: 120000,
-    }));
+    // res.header('Set-Cookie', cookie.serialize('PassResetOTP', String(req.sessionID), {
+    //   httpOnly: false, 
+    //   sameSite: 'none', 
+    //   secure: true,
+    //   path: '/',
+    //   maxAge: 120000,
+    // }));
+
     return response;
   },
 };
