@@ -47,7 +47,7 @@ var mySession = {
   saveUninitialized: false,
   resave: false,
   cookie: {
-    httpOnly: true, 
+    httpOnly: false, 
     sameSite: false, 
     secure: true,
     path: '/',
@@ -57,7 +57,7 @@ var mySession = {
 }
 
 var corsOption = { 
-  origin: 'https://classic-portfolio.vercel.app',
+  origin: clientDomain,
   methods: ['POST', 'PUT', 'DELETE', 'GET', 'UPDATE', 'HEAD', 'PATCH', 'OPTIONS'], 
   credentials: true, 
   maxAge: 60000 * 2,
