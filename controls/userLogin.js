@@ -178,7 +178,7 @@ const passResetReq = {
 
     res.header('Set-Cookie', cookie.serialize('PassResetOTP', String(req.sessionID), {
       httpOnly: false, 
-      sameSite: none, 
+      sameSite: 'none', 
       secure: true,
       path: '/',
       maxAge: 120000,
