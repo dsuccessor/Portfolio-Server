@@ -49,6 +49,7 @@ var mySession = {
   cookie: {
     domain: 'https://classic-portfolio.vercel.app',
     httpOnly: false, 
+    sameSite: 'none',
     secure: true,
     path: '/',
     maxAge: 120000,
