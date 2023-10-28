@@ -47,7 +47,7 @@ var mySession = {
   saveUninitialized: false,
   resave: false,
   cookie: {
-    domain: 'https://classic-portfolio.vercel.app',
+    //domain: 'https://classic-portfolio.vercel.app',
     httpOnly: false, 
     sameSite: 'none',
     secure: true,
