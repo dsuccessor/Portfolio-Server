@@ -174,7 +174,7 @@ const passResetReq = {
     const response = convertDate(result);
     response.token = token
     res.header("auth-token", token)
-    res.header("Set-Cookie", session({cookie: {sameSite: 'none'}}))
+    res.header("Set-Cookie", String(session({cookie: {sameSite: 'none'}})))
     return response;
   },
 };
