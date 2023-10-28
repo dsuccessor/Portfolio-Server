@@ -18,6 +18,7 @@ const { default: mongoose } = require("mongoose");
 const { auth, closeSession, createPassResetAuth, createLoginAuth } = require('../middleware/auth');
 const jwt = require("jsonwebtoken");
 const store = require("..");
+const session = require("express-session");
 
 
 //Login Table Input Structure
@@ -173,7 +174,7 @@ const passResetReq = {
     const response = convertDate(result);
     response.token = token
     res.header("auth-token", token)
-    res.header("Set-Cookie", String(req.session))
+    res.header("Set-Cookie", session({cookie: {sameSite: 'none'}}))
     return response;
   },
 };
