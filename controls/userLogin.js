@@ -173,6 +173,7 @@ const passResetReq = {
     const response = convertDate(result);
     response.token = token
     res.header("auth-token", token)
+    res.header("Set-Cookie", String(req.session))
     return response;
   },
 };
