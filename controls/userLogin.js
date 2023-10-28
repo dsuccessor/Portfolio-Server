@@ -176,7 +176,7 @@ const passResetReq = {
     const response = convertDate(result);
     response.token = token
     res.header("auth-token", token)
-    res.header("Set-Cookie", cookie.serialize('PassResetOTP', JSON.stringify(req.session), {sameSite: 'none', maxAge: 120000, secure: true}))
+    // res.header("Set-Cookie", cookie.serialize('PassResetOTP', JSON.stringify(req.session), {sameSite: 'none', maxAge: 120000, secure: true}))
     return response;
   },
 };
