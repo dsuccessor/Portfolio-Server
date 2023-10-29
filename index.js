@@ -47,9 +47,9 @@ var mySession = {
   saveUninitialized: false,
   resave: false,
   cookie: {
-    httpOnly: false,
+    httpOnly: true,
     sameSite: 'none',
-    secure: true,
+    secure: clientDomainSecurity,
     maxAge: 120000,
   },
   store: store,
