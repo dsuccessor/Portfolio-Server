@@ -186,7 +186,7 @@ const confirmOtp = {
     otp: { type: GraphQLNonNull(GraphQLString) },
   },
   resolve: async (_, args, { req }) => {
-
+      console.log("cookie = ", req?.cookie);
     // Checking if user provide the needed info
     if (!args) {
       throw new GraphQLError("Email and OTP must be provided")
