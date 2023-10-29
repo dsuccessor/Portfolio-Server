@@ -137,7 +137,7 @@ const passResetReq = {
   args: {
     email: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, { req, res} ) => {
+  resolve: async (_, args, { req, res }) => {
 
     // Checking if user supplied all needed info
     if (!args) {
@@ -170,11 +170,11 @@ const passResetReq = {
     await sendMail("Password Reset OTP", args?.email, emailContent)
     console.log('generate otp & send to mail' + JSON.stringify(req?.session?.otp));
     console.log(req.sessionID)
-    
+
     const response = convertDate(result);
     response.token = token
     res.header("auth-token", token)
- return response;
+    return response;
   },
 };
 
@@ -187,14 +187,14 @@ const confirmOtp = {
   },
   resolve: async (_, args, { req }) => {
 
-     // Checking if user provide the needed info
-     if (!args) {
+    // Checking if user provide the needed info
+    if (!args) {
       throw new GraphQLError("Email and OTP must be provided")
     }
 
-      // Validating user Authorization Code
-      const decode = await auth(args, req);
-      console.log(decode);
+    // Validating user Authorization Code
+    const decode = await auth(args, req);
+    console.log(decode);
 
     // Converting OTP from user to Int 
     var code = { email: args?.email, otp: parseInt(args?.otp) }
@@ -210,8 +210,8 @@ const confirmOtp = {
     // const result = await mongoose.connection.collection('passResetOtp').findOne({_id: sid});
     // const session = result?.session?.otp;
     // console.log('otp from mongo ' + otp);
-      // req.app.locals.sessionID = null
-      // req.app.locals.resetSession = true
+    // req.app.locals.sessionID = null
+    // req.app.locals.resetSession = true
 
     const session = req?.session?.otp
     // Checking if OTP has been initiated

@@ -9,8 +9,8 @@ const { portfolioRoute } = require("./routes/routes");
 const session = require("express-session");
 const mongoDbStore = require("connect-mongodb-session")(session);
 const clientDomain = process.env.NODE_ENV === 'development' ?
-['http://localhost:3000', 'https://legacy.graphqlbin.com'] : 
-'https://classic-portfolio.vercel.app'
+  ['http://localhost:3000', 'https://legacy.graphqlbin.com'] :
+  'https://classic-portfolio.vercel.app'
 
 const clientDomainSecurity = process.env.NODE_ENV === 'development' ? false : true
 
@@ -36,13 +36,13 @@ store.on('connected', (result) => {
   store.client;
   console.log(`Connected to mongodb store`)
 })
-store.on('error', (err) =>{
+store.on('error', (err) => {
   console.log(`Connected to mongodb store ${err}`)
 })
 
 
 var mySession = {
-  name: 'PassResetOTP',
+  name: 'passReset',
   secret: 'secretkey',
   saveUninitialized: false,
   resave: false,
@@ -54,12 +54,12 @@ var mySession = {
   store: store,
 }
 
-var corsOption = { 
+var corsOption = {
   origin: 'https://classic-portfolio.vercel.app',
-  methods: ['POST', 'PUT', 'DELETE', 'GET', 'UPDATE', 'HEAD', 'PATCH', 'OPTIONS'], 
-  credentials: true, 
+  methods: ['POST', 'PUT', 'DELETE', 'GET', 'UPDATE', 'HEAD', 'PATCH', 'OPTIONS'],
+  credentials: true,
   maxAge: 60000 * 2,
- }
+}
 
 
 // Middleware
