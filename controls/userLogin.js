@@ -15,7 +15,7 @@ const { sendMail } = require("../service/mailService");
 const otpGenerator = require("otp-generator");
 const { json } = require("express");
 const { default: mongoose } = require("mongoose");
-const { auth, closeSession, createPassResetAuth, createLoginAuth } = require('../middleware/auth');
+const { auth, closeSession, createPassResetAuth, createLoginAuth, validateLogin } = require('../middleware/auth');
 const jwt = require("jsonwebtoken");
 const store = require("..");
 const session = require("express-session");
@@ -28,6 +28,7 @@ const loginInput = new GraphQLInputObjectType({
   fields: () => ({
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
+    newPassword: { type: GraphQLNonNull(GraphQLString) },
   }),
 });
 
@@ -102,21 +103,7 @@ const validateUser = {
   },
   resolve: async (_, args, { req, res }) => {
 
-    // Checking if user provide the needed info
-    if (!args) {
-      throw new GraphQLError("Email and Password must be provided to Login")
-    }
-
-    const result = await userModel?.findOne({
-      email: args?.email,
-      password: args?.password,
-    });
-
-    if (result?.length < 1 || result == null) {
-      throw new GraphQLError(
-        `Admin with ${args.email} and ${args.password} does not exist, Kindly check and try again`
-      );
-    }
+    const result = await validateLogin(args)
 
     const loginToken = await createLoginAuth(args)
 
@@ -186,7 +173,7 @@ const confirmOtp = {
     otp: { type: GraphQLNonNull(GraphQLString) },
   },
   resolve: async (_, args, { req }) => {
-      console.log("cookie = ", req?.cookie);
+    console.log("cookie = ", req?.cookie);
     // Checking if user provide the needed info
     if (!args) {
       throw new GraphQLError("Email and OTP must be provided")
@@ -240,22 +227,30 @@ const resetPassword = {
   args: {
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
+    newPassword: { type: GraphQLNonNull(GraphQLString) },
   },
   resolve: async (parent, args) => {
+    console.log(args);
+
+    await validateLogin(args)
 
     const result = await userModel.findOneAndUpdate(
-      args.email,
-      {
-        $set: { password: args.password },
-      },
-      { new: true }
-    );
+      { email: args.email, password: args.password }, 
+      { password: args.newPassword }, 
+      { new: true, returnOriginal: false })
 
-    const runUpdate = mutationConvertDate(result);
+
+    console.log("result", result);
+
+    const runUpdate = convertDate(result);
+
+    console.log("run update", runUpdate);
 
     if (runUpdate) {
+      console.log("Password reset");
       return runUpdate;
     } else {
+      console.log("Failed to reset password");
       throw new GraphQLError(
         `Failed to reset ${args.email} password,`);
     }

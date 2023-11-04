@@ -9,12 +9,14 @@ const {
   GraphQLError,
   GraphQLInputObjectType,
 } = require("graphql");
+
 const {
   languageModel,
   projectModel,
   skillModel,
   mediaModel,
 } = require("../models/portfolioTablesModel");
+
 const { loginAuth } = require("../middleware/auth");
 
 // portflio table languages
@@ -205,16 +207,15 @@ const getLanguages = {
   resolve: async (_, args, {req}) => {
      // Validating user Authorization Code
       const decode = await loginAuth(req);
-      console.log(decode);
-    const result = await languageModel.find();
+    const result = await languageModel.find({});
     const serverResponse = convertDate(result);
     console.log(serverResponse);
     if (result.length > 0) {
       return serverResponse;
-    } else if (result === 0) {
+    } else if (result == 0) {
       throw new GraphQLError("No record found for portfolios");
     } else {
-      throw new GraphQLError({
+      throw new GraphQLError("Something went wrong, Kindly contact Admin",{
         errors,
       });
     }
@@ -247,7 +248,7 @@ const getProjects = {
     console.log(serverResponse);
     if (result.length > 0) {
       return serverResponse;
-    } else if (result === 0) {
+    } else if (result == 0) {
       throw new GraphQLError("No record found for portfolios");
     } else {
       throw new GraphQLError({
@@ -283,7 +284,7 @@ const getSkills = {
     console.log(serverResponse);
     if (result.length > 0) {
       return serverResponse;
-    } else if (result === 0) {
+    } else if (result == 0) {
       throw new GraphQLError("No record found for portfolios");
     } else {
       throw new GraphQLError({
@@ -319,7 +320,7 @@ const getMedias = {
     console.log(serverResponse);
     if (result.length > 0) {
       return serverResponse;
-    } else if (result === 0) {
+    } else if (result == 0) {
       throw new GraphQLError("No record found for portfolios");
     } else {
       throw new GraphQLError({
