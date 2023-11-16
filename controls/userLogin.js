@@ -15,11 +15,16 @@ const { sendMail } = require("../service/mailService");
 const otpGenerator = require("otp-generator");
 const { json } = require("express");
 const { default: mongoose } = require("mongoose");
-const { auth, closeSession, createPassResetAuth, createLoginAuth, validateLogin } = require('../middleware/auth');
+const {
+  auth,
+  closeSession,
+  createPassResetAuth,
+  createLoginAuth,
+  validateLogin,
+} = require("../middleware/auth");
 const jwt = require("jsonwebtoken");
 const store = require("..");
 const session = require("express-session");
-
 
 //Login Table Input Structure
 const loginInput = new GraphQLInputObjectType({
@@ -102,18 +107,18 @@ const validateUser = {
     password: { type: GraphQLNonNull(GraphQLString) },
   },
   resolve: async (_, args, { req, res }) => {
+    const result = await validateLogin(args);
 
-    const result = await validateLogin(args)
-
-    const loginToken = await createLoginAuth(args)
+    const loginToken = await createLoginAuth(args);
 
     if (!loginToken) {
-      throw new GraphQLError("Unable to create Authorization key for user")
+      console.log("Unable to create Authorization key for user");
+      throw new GraphQLError("Unable to create Authorization key for user");
     }
 
     const response = convertDate(result);
-    response.token = loginToken
-    res.header("auth-token", loginToken)
+    response.token = loginToken;
+    res.header("auth-token", loginToken);
     return response;
   },
 };
@@ -125,10 +130,9 @@ const passResetReq = {
     email: { type: GraphQLNonNull(GraphQLString) },
   },
   resolve: async (_, args, { req, res }) => {
-
     // Checking if user supplied all needed info
     if (!args) {
-      throw new GraphQLError("Email must be provided")
+      throw new GraphQLError("Email must be provided");
     }
 
     // req.app.locals.sessionID = null
@@ -144,23 +148,29 @@ const passResetReq = {
       );
     }
 
-    const token = await createPassResetAuth(args)
+    const token = await createPassResetAuth(args);
 
     if (!token) {
-      throw new GraphQLError("Unable to create Authorization key for user")
+      throw new GraphQLError("Unable to create Authorization key for user");
     }
 
-    var otp = otpGenerator.generate(6, { lowerCaseAlphabets: false, upperCaseAlphabets: false, specialChars: false })
-    req.session.otp = { email: args.email, otp: parseInt(otp) }
-    const emailContent = `Dear ${args.email}, \nKindly find below the authorization OTP requested for you password reset. \n${otp}. \nCheers,`
+    var otp = otpGenerator.generate(6, {
+      lowerCaseAlphabets: false,
+      upperCaseAlphabets: false,
+      specialChars: false,
+    });
+    req.session.otp = { email: args.email, otp: parseInt(otp) };
+    const emailContent = `Dear ${args.email}, \nKindly find below the authorization OTP requested for you password reset. \n${otp}. \nCheers,`;
 
-    await sendMail("Password Reset OTP", args?.email, emailContent)
-    console.log('generate otp & send to mail' + JSON.stringify(req?.session?.otp));
-    console.log(req.sessionID)
+    await sendMail("Password Reset OTP", args?.email, emailContent);
+    console.log(
+      "generate otp & send to mail" + JSON.stringify(req?.session?.otp)
+    );
+    console.log(req.sessionID);
 
     const response = convertDate(result);
-    response.token = token
-    res.header("auth-token", token)
+    response.token = token;
+    res.header("auth-token", token);
     return response;
   },
 };
@@ -176,15 +186,15 @@ const confirmOtp = {
     console.log("cookie = ", req?.cookie);
     // Checking if user provide the needed info
     if (!args) {
-      throw new GraphQLError("Email and OTP must be provided")
+      throw new GraphQLError("Email and OTP must be provided");
     }
 
     // Validating user Authorization Code
     const decode = await auth(args, req);
     console.log(decode);
 
-    // Converting OTP from user to Int 
-    var code = { email: args?.email, otp: parseInt(args?.otp) }
+    // Converting OTP from user to Int
+    var code = { email: args?.email, otp: parseInt(args?.otp) };
 
     // const sid = req?.app?.locals?.sessionID
     // const sidValidity = req?.app?.locals?.resetSession
@@ -200,26 +210,26 @@ const confirmOtp = {
     // req.app.locals.sessionID = null
     // req.app.locals.resetSession = true
 
-    const session = req?.session?.otp
+    const session = req?.session?.otp;
     // Checking if OTP has been initiated
     if (!session) {
-      throw new GraphQLError('OTP Expired');
+      throw new GraphQLError("OTP Expired");
     }
 
     // Validating OTP and Sending feedback to user
     if (session?.email === code?.email && session?.otp === code?.otp) {
-      const response = { message: 'OTP Confirmed' }
-      await closeSession(req)
+      const response = { message: "OTP Confirmed" };
+      await closeSession(req);
       console.log(req.session);
       console.log(response);
-      return response
-    }
-    else {
-      throw new GraphQLError('Invalid OTP, Kindly confirm the OTP sent to your email address and try again');
+      return response;
+    } else {
+      throw new GraphQLError(
+        "Invalid OTP, Kindly confirm the OTP sent to your email address and try again"
+      );
     }
   },
 };
-
 
 const resetPassword = {
   type: login,
@@ -232,13 +242,13 @@ const resetPassword = {
   resolve: async (parent, args) => {
     console.log(args);
 
-    await validateLogin(args)
+    await validateLogin(args);
 
     const result = await userModel.findOneAndUpdate(
-      { email: args.email, password: args.password }, 
-      { password: args.newPassword }, 
-      { new: true, returnOriginal: false })
-
+      { email: args.email, password: args.password },
+      { password: args.newPassword },
+      { new: true, returnOriginal: false }
+    );
 
     console.log("result", result);
 
@@ -251,8 +261,7 @@ const resetPassword = {
       return runUpdate;
     } else {
       console.log("Failed to reset password");
-      throw new GraphQLError(
-        `Failed to reset ${args.email} password,`);
+      throw new GraphQLError(`Failed to reset ${args.email} password,`);
     }
   },
 };

@@ -8,11 +8,13 @@ const app = express();
 const { portfolioRoute } = require("./routes/routes");
 const session = require("express-session");
 const mongoDbStore = require("connect-mongodb-session")(session);
-const clientDomain = process.env.NODE_ENV === 'development' ?
-  ['http://localhost:3000', 'https://legacy.graphqlbin.com'] :
-  'https://classic-portfolio.vercel.app'
+const clientDomain =
+  process.env.NODE_ENV === "development"
+    ? ["http://localhost:3000", "https://legacy.graphqlbin.com"]
+    : "https://classic-portfolio.vercel.app";
 
-const clientDomainSecurity = process.env.NODE_ENV === 'development' ? false : true
+const clientDomainSecurity =
+  process.env.NODE_ENV === "development" ? false : true;
 
 // Mongoose configuration
 mongoose.connect(process.env.MONGO_DB, (error, response) => {
@@ -24,57 +26,65 @@ mongoose.connect(process.env.MONGO_DB, (error, response) => {
 });
 
 //Mongodb Store
-const store = new mongoDbStore(
-  {
-    uri: process.env.MONGO_DB,
-    collection: 'passResetOtp'
-  },
-)
+const store = new mongoDbStore({
+  uri: process.env.MONGO_DB,
+  collection: "passResetOtp",
+});
 
 // Store Initialization
-store.on('connected', (result) => {
+store.on("connected", (result) => {
   store.client;
-  console.log(`Connected to mongodb store`)
-})
-store.on('error', (err) => {
-  console.log(`Connected to mongodb store ${err}`)
-})
-
+  console.log(`Connected to mongodb store`);
+});
+store.on("error", (err) => {
+  console.log(`Connected to mongodb store ${err}`);
+});
 
 var mySession = {
-  name: 'passReset',
-  secret: 'secretkey',
+  name: "passReset",
+  secret: "secretkey",
   saveUninitialized: false,
   resave: false,
   cookie: {
     httpOnly: true,
-    sameSite: 'none',
+    sameSite: "none",
     secure: clientDomainSecurity,
     maxAge: 120000,
   },
   store: store,
-}
+};
 
 var corsOption = {
   origin: clientDomain,
-  methods: ['POST', 'PUT', 'DELETE', 'GET', 'UPDATE', 'HEAD', 'PATCH', 'OPTIONS'],
+  methods: [
+    "POST",
+    "PUT",
+    "DELETE",
+    "GET",
+    "UPDATE",
+    "HEAD",
+    "PATCH",
+    "OPTIONS",
+  ],
   credentials: true,
   maxAge: 60000 * 2,
-}
-
+};
 
 // Middleware
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
-app.set('trust proxy', 1) // trust first proxy
-app.use(session(mySession))
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+app.set("trust proxy", 1); // trust first proxy
+app.use(session(mySession));
 app.use(cors(corsOption));
 
-
 // General Endpoint
-app.use("/portfolio", (req, res, next) => {
-  return next()
-}, portfolioRoute);
+app.use(
+  "/portfolio",
+  (req, res, next) => {
+    return next();
+  },
+  portfolioRoute
+);
 
 // Server Connection
 app.listen(port, (err) => {
@@ -85,6 +95,4 @@ app.listen(port, (err) => {
   }
 });
 
-
-
-module.exports = store
+module.exports = store;

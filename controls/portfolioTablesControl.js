@@ -192,21 +192,29 @@ const getLanguageById = {
   type: languages,
   description: "Fetch language by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return languageModel.findById(args.id);
   },
 };
 const getLanguages = {
   type: GraphQLList(languages),
   description: "Fetch all languages",
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
     const result = await languageModel.find({});
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -215,7 +223,7 @@ const getLanguages = {
     } else if (result == 0) {
       throw new GraphQLError("No record found for portfolios");
     } else {
-      throw new GraphQLError("Something went wrong, Kindly contact Admin",{
+      throw new GraphQLError("Something went wrong, Kindly contact Admin", {
         errors,
       });
     }
@@ -227,22 +235,30 @@ const getProjectById = {
   type: projects,
   description: "Fetch project by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return projectModel.findById(args.id);
   },
 };
 const getProjects = {
   type: GraphQLList(projects),
   description: "Fetch all projects",
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const result = await projectModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -263,22 +279,30 @@ const getSkillById = {
   type: skills,
   description: "Fetch skill by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return skillModel.findById(args.id);
   },
 };
 const getSkills = {
   type: GraphQLList(skills),
   description: "Fetch all skills",
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const result = await skillModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -299,22 +323,30 @@ const getMediaById = {
   type: medias,
   description: "Fetch media by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return mediaModel.findById(args.id);
   },
 };
 const getMedias = {
   type: GraphQLList(medias),
   description: "Fetch all medias",
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const result = await mediaModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -336,15 +368,18 @@ const addLanguage = {
   type: languages,
   description: "Add a language",
   args: {
+    platform: { type: GraphQLString },
     name: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
     logo: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(levelEnum) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const languageRecord = {
       name: args.name,
       description: args.description,
@@ -383,12 +418,15 @@ const deleteLanguageById = {
   type: languages,
   description: "Delete a language by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return languageModel.findByIdAndDelete(args.id);
   },
 };
@@ -396,13 +434,16 @@ const updateLanguageById = {
   type: languages,
   description: "Update a language by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
     level: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const updateRecord = {
       level: args.level,
     };
@@ -423,15 +464,18 @@ const addProject = {
   type: projects,
   description: "Add a project",
   args: {
+    platform: { type: GraphQLString },
     name: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
     flyer: { type: GraphQLNonNull(GraphQLString) },
     technologies: { type: GraphQLNonNull(GraphQLList(GraphQLString)) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const projectRecord = {
       name: args.name,
       description: args.description,
@@ -470,12 +514,15 @@ const deleteProjectById = {
   type: projects,
   description: "Delete a project by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return projectModel.findByIdAndDelete(args.id);
   },
 };
@@ -483,14 +530,17 @@ const updateProjectById = {
   type: projects,
   description: "Update a project by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
     flyer: { type: GraphQLNonNull(GraphQLString) },
     technologies: { type: GraphQLNonNull(GraphQLList(GraphQLString)) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const updateRecord = {
       flyer: args.flyer,
       technologies: args.technologies,
@@ -512,15 +562,18 @@ const addSkill = {
   type: skills,
   description: "Add a skill",
   args: {
+    platform: { type: GraphQLString },
     name: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
     logo: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(levelEnum) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const skillRecord = {
       name: args.name,
       description: args.description,
@@ -559,12 +612,15 @@ const deleteSkillById = {
   type: skills,
   description: "Delete a skill by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return skillModel.findByIdAndDelete(args.id);
   },
 };
@@ -572,13 +628,16 @@ const updateSkillById = {
   type: skills,
   description: "Update a skill by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
     level: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const updateRecord = {
       level: args.level,
     };
@@ -599,15 +658,18 @@ const addMedia = {
   type: medias,
   description: "Add a media",
   args: {
+    platform: { type: GraphQLString },
     name: { type: GraphQLNonNull(GraphQLString) },
     handle: { type: GraphQLNonNull(GraphQLString) },
     logo: { type: GraphQLNonNull(GraphQLString) },
     link: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const mediaRecord = {
       name: args.name,
       handle: args.handle,
@@ -646,12 +708,15 @@ const deleteMediaById = {
   type: medias,
   description: "Delete a media by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     return mediaModel.findByIdAndDelete(args.id);
   },
 };
@@ -659,14 +724,17 @@ const updateMediaById = {
   type: medias,
   description: "Update a media by Id",
   args: {
+    platform: { type: GraphQLString },
     id: { type: GraphQLNonNull(GraphQLID) },
     handle: { type: GraphQLNonNull(GraphQLString) },
     link: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-     // Validating user Authorization Code
-      const decode = await loginAuth(req);
-      console.log(decode);
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    const decode = await loginAuth(req, platform);
+    console.log(decode);
     const updateRecord = {
       handle: args.handle,
       link: args.link,
