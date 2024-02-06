@@ -1,112 +1,111 @@
-const {GraphQLError } = require("graphql");
-const jwt = require('jsonwebtoken');
+const { GraphQLError } = require("graphql");
+const jwt = require("jsonwebtoken");
 const userModel = require("../models/usersModel");
 
-const auth = async (user, req, next)=> {
+const auth = async (user, req, next) => {
+  const userToken = req?.headers?.authorization;
 
-    const userToken = req?.headers?.authorization
+  if (!userToken) {
+    throw new GraphQLError(
+      "Authentication failed, Authentication Token not Provided"
+    );
+  }
 
-    if(!userToken){
-        throw new GraphQLError('Authentication failed, Authentication Token not Provided')
+  try {
+    const decode = jwt.verify(userToken, process.env.JWT_KEY);
+
+    if (!decode) {
+      throw new GraphQLError(
+        "Authentication failed, Invalid Authorization Token"
+      );
     }
 
-    try {
-
-    const decode = jwt.verify(userToken, process.env.JWT_KEY)
-
-    if (!decode){
-        throw new GraphQLError('Authentication failed, Invalid Authorization Token')
+    if (user?.email === decode?.email) {
+      return decode;
     }
 
-    if(user?.email === decode?.email){
-        return decode
+    throw new GraphQLError("Authentication failed, Impersonation suspected");
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new GraphQLError("Invalid Token", error);
     }
 
-    throw new GraphQLError('Authentication failed, Impersonation suspected')
-        
-    } catch (error) {
-        if(error instanceof jwt.JsonWebTokenError){
-        throw new GraphQLError('Invalid Token', error)
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new GraphQLError("Token Expired", error);
     }
 
-    if(error instanceof jwt.TokenExpiredError){
-        throw new GraphQLError('Token Expired', error)
+    throw new GraphQLError("Internal server error", error);
+  }
+};
+
+const loginAuth = async (req, platform, next) => {
+  const userToken = req?.headers?.authorization;
+
+  if (platform && platform !== "app") {
+    throw new GraphQLError("Platform not supported on this server");
+  }
+
+  if (!platform && !userToken) {
+    throw new GraphQLError("Authentication Token not Provided");
+  }
+
+  try {
+    const decode = platform ?? jwt.verify(userToken, process.env.JWT_KEY);
+
+    if (!decode) {
+      throw new GraphQLError(
+        "Authentication failed, Invalid Authorization Token"
+      );
+    }
+    console.log("auth-key", decode ?? platform);
+    return decode ?? platform;
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      throw new GraphQLError("Invalid Token", error);
     }
 
-        throw new GraphQLError('Internal server error', error)
-   
-}
-    
-}
-
-const loginAuth = async (req, next)=> {
-
-    const userToken = req?.headers?.authorization
-
-    if(!userToken){
-        throw new GraphQLError('Authentication Token not Provided')
+    if (error instanceof jwt.TokenExpiredError) {
+      throw new GraphQLError("Token Expired", error);
     }
 
-    try {
+    throw new GraphQLError("Internal server error", error);
+  }
+};
 
-    const decode = jwt.verify(userToken, process.env.JWT_KEY)
+const closeSession = async (req, next) => {
+  if (req?.session) {
+    req?.session?.destroy((err) => {
+      if (err) {
+        throw new GraphQLError("Unable to destroy session");
+      }
+    });
+  } else {
+    throw new GraphQLError("No Open session to close");
+  }
+};
 
-    if (!decode){
-        throw new GraphQLError('Authentication failed, Invalid Authorization Token')
-    }
-        console.log("auth-key", decode);
-        return decode
-        
-    } catch (error) {
-        if(error instanceof jwt.JsonWebTokenError){
-        throw new GraphQLError('Invalid Token', error)
-    }
+const createPassResetAuth = async (args, next) => {
+  const token = jwt.sign(args, process.env.JWT_KEY, { expiresIn: "10m" });
 
-    if(error instanceof jwt.TokenExpiredError){
-        throw new GraphQLError('Token Expired', error)
-    }
+  if (!token) {
+    throw new GraphQLError("Failed to create Authentication Token");
+  }
 
-        throw new GraphQLError('Internal server error', error)
-   
-}
-    
-}
+  return token;
+};
 
-const closeSession = async (req, next)=>{
+const createLoginAuth = async (args, next) => {
+  console.log("sign key", process.env.JWT_KEY);
+  const token = jwt.sign(args, process.env.JWT_KEY, { expiresIn: "1h" });
 
-    if(req?.session){
-    req?.session?.destroy((err)=> {
-        if(err){
-              throw new GraphQLError('Unable to destroy session');
-            }
-      })
-    }
-    else {
-        throw new GraphQLError('No Open session to close');
-    }
-}
+  if (!token) {
+    console.log("Failed to create Authentication Token" + token);
+    throw new GraphQLError("Failed to create Authentication Token");
+  }
 
-const createPassResetAuth = async (args, next)=>{
-
-    const token = jwt.sign(args, process.env.JWT_KEY, { expiresIn: "10m" })
-
-    if (!token){
-        throw new GraphQLError('Failed to create Authentication Token')
-    }
-
-    return token
-}
-
-const createLoginAuth = async (args, next)=>{
-
-    const token = jwt.sign(args, process.env.JWT_KEY, { expiresIn: "1h" })
-
-    if (!token){
-        throw new GraphQLError('Failed to create Authentication Token')
-    }
-
-    return token
-}
+  console.log("token created" + token);
+  return token;
+};
 
 const validateLogin = async (args, next) =>{
 
@@ -144,4 +143,11 @@ const validateLogin = async (args, next) =>{
       
 }
 
-module.exports = {auth, closeSession, loginAuth, createLoginAuth, createPassResetAuth, validateLogin};
+module.exports = {
+  auth,
+  closeSession,
+  loginAuth,
+  createLoginAuth,
+  createPassResetAuth,
+  validateLogin,
+};

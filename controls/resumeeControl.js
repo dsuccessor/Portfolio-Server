@@ -361,9 +361,13 @@ const getObjectiveById = {
   description: "Fetch objective by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await objectiveModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -381,8 +385,14 @@ const getObjectiveById = {
 const getObjectives = {
   type: GraphQLList(objective),
   description: "Fetch all objectives",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await objectiveModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -404,9 +414,13 @@ const getEducationById = {
   description: "Fetch education by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await educationModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -424,8 +438,14 @@ const getEducationById = {
 const getEducations = {
   type: GraphQLList(education),
   description: "Fetch all educations",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await educationModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -447,9 +467,13 @@ const getExperienceById = {
   description: "Fetch experience by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await experienceModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -467,8 +491,14 @@ const getExperienceById = {
 const getExperiences = {
   type: GraphQLList(experience),
   description: "Fetch all experiences",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await experienceModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -490,9 +520,13 @@ const getAwardById = {
   description: "Fetch award by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await awardModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -510,8 +544,14 @@ const getAwardById = {
 const getAwards = {
   type: GraphQLList(award),
   description: "Fetch all awards",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await awardModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -533,9 +573,13 @@ const getCvLanguageById = {
   description: "Fetch Cv Language by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await cvlanguageModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -553,8 +597,14 @@ const getCvLanguageById = {
 const getCvLanguages = {
   type: GraphQLList(cvLanguage),
   description: "Fetch all Cv Languages",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await cvlanguageModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -576,9 +626,13 @@ const getCertificationById = {
   description: "Fetch certification by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await certificationModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -598,8 +652,14 @@ const getCertificationById = {
 const getCertifications = {
   type: GraphQLList(certification),
   description: "Fetch all certifications",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await certificationModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -621,9 +681,13 @@ const getHobbyById = {
   description: "Fetch hobby by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await hobbyModel.findById(args.id);
     const serverResponse = convertDate(result);
     if (result.length > 0) {
@@ -641,8 +705,14 @@ const getHobbyById = {
 const getHobbies = {
   type: GraphQLList(hobby),
   description: "Fetch all hobbies",
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  args: {
+    platform: { type: GraphQLString },
+  },
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await hobbyModel.find();
     const serverResponse = convertDate(result);
     console.log(serverResponse);
@@ -664,12 +734,16 @@ const addObjective = {
   type: objective,
   description: "Add an objective",
   args: {
+    platform: { type: GraphQLString },
     version: { type: GraphQLNonNull(GraphQLString) },
     summary: { type: GraphQLNonNull(GraphQLString) },
     logo: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { version, summary, logo } = args;
 
     const objArr = [version, summary, logo];
@@ -703,9 +777,13 @@ const deleteObjectiveById = {
   description: "Delete an objective by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await objectiveModel.findByIdAndDelete(args.id);
     const create = mutationConvertDate(result);
     return create;
@@ -717,17 +795,23 @@ const updateObjectiveById = {
   description: "Update an objective by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     version: { type: GraphQLString },
     summary: { type: GraphQLString },
     logo: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const updateRecord = Object.keys(args)
-.filter((key) => args[key] != null && args[key] !== "")
-.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
+      .filter((key) => args[key] != null && args[key] !== "")
+      .reduce((cur, key) => {
+        return Object.assign(cur, { [key]: args[key] });
+      }, {});
 
-const recordCount = Object.keys(updateRecord);
+    const recordCount = Object.keys(updateRecord);
 
     if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
@@ -760,14 +844,18 @@ const addEducation = {
   type: education,
   description: "Add an education",
   args: {
+    platform: { type: GraphQLString },
     school: { type: GraphQLNonNull(GraphQLString) },
     period: { type: GraphQLNonNull(GraphQLString) },
     qualification: { type: GraphQLNonNull(GraphQLString) },
     course: { type: GraphQLNonNull(GraphQLString) },
     grade: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { school, period, qualification, course, grade } = args;
 
     const eduArr = [school, period, qualification, course, grade];
@@ -805,9 +893,13 @@ const deleteEducationById = {
   description: "Delete an education by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await educationModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -818,19 +910,25 @@ const updateEducationById = {
   description: "Update an education by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     school: { type: GraphQLString },
     period: { type: GraphQLString },
     qualification: { type: GraphQLString },
     course: { type: GraphQLString },
     grade: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const updateRecord = Object.keys(args)
-.filter((key) => args[key] != null && args[key] !== "")
-.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
+      .filter((key) => args[key] != null && args[key] !== "")
+      .reduce((cur, key) => {
+        return Object.assign(cur, { [key]: args[key] });
+      }, {});
 
-const recordCount = Object.keys(updateRecord);
+    const recordCount = Object.keys(updateRecord);
 
     if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
@@ -862,13 +960,17 @@ const addExperience = {
   type: experience,
   description: "Add an experience",
   args: {
+    platform: { type: GraphQLString },
     organization: { type: GraphQLNonNull(GraphQLString) },
     role: { type: GraphQLNonNull(GraphQLString) },
     position: { type: GraphQLNonNull(GraphQLString) },
     period: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { organization, role, position, period } = args;
 
     const expArr = [organization, role, position, period];
@@ -905,9 +1007,13 @@ const deleteExperienceById = {
   description: "Delete an experience by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await experienceModel.findByIdAndDelete(args.id);
 
     return mutationConvertDate(result);
@@ -919,18 +1025,24 @@ const updateExperienceById = {
   description: "Update an experience by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     organization: { type: GraphQLString },
     role: { type: GraphQLString },
     position: { type: GraphQLString },
     period: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const updateRecord = Object.keys(args)
-.filter((key) => args[key] != null && args[key] !== "")
-.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
+      .filter((key) => args[key] != null && args[key] !== "")
+      .reduce((cur, key) => {
+        return Object.assign(cur, { [key]: args[key] });
+      }, {});
 
-const recordCount = Object.keys(updateRecord);
+    const recordCount = Object.keys(updateRecord);
 
     if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
@@ -964,13 +1076,17 @@ const addAward = {
   type: award,
   description: "Add an award",
   args: {
+    platform: { type: GraphQLString },
     organization: { type: GraphQLNonNull(GraphQLString) },
     award: { type: GraphQLNonNull(GraphQLString) },
     logo: { type: GraphQLNonNull(GraphQLString) },
     period: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { organization, award, logo, period } = args;
 
     const awardArr = [organization, award, logo, period];
@@ -1007,9 +1123,13 @@ const deleteAwardById = {
   description: "Delete an award by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await awardModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1020,25 +1140,30 @@ const updateAwardById = {
   description: "Update an award by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     organization: { type: GraphQLString },
     award: { type: GraphQLString },
     logo: { type: GraphQLString },
     period: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const updateRecord = Object.keys(args)
-    .filter((key) => args[key] != null && args[key] !== "")
-    .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
-    
+      .filter((key) => args[key] != null && args[key] !== "")
+      .reduce((cur, key) => {
+        return Object.assign(cur, { [key]: args[key] });
+      }, {});
+
     const recordCount = Object.keys(updateRecord);
-    
-        if (recordCount.length < 2 || recordCount === null) {
-          throw new GraphQLError(
-            `No update data provided, Kindly provide atleast one data to update `
-          );
-        }
-    
+
+    if (recordCount.length < 2 || recordCount === null) {
+      throw new GraphQLError(
+        `No update data provided, Kindly provide atleast one data to update `
+      );
+    }
 
     const result = await experienceModel.findByIdAndUpdate(
       args.id,
@@ -1064,11 +1189,15 @@ const addCvLanguage = {
   type: cvLanguage,
   description: "Add a Cv Language",
   args: {
+    platform: { type: GraphQLString },
     language: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(languageLevel) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { language, level } = args;
 
     const cvLangArr = [language, level];
@@ -1103,9 +1232,13 @@ const deleteCvLanguageById = {
   description: "Delete a Cv Language by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await cvlanguageModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1116,11 +1249,15 @@ const updateCvLanguageById = {
   description: "Update a Cv Language by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     language: { type: GraphQLNonNull(GraphQLString) },
     level: { type: GraphQLNonNull(languageLevel) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { id, language, level } = args;
 
     const cvLangArr = [id, language, level];
@@ -1162,13 +1299,17 @@ const addCertification = {
   type: certification,
   description: "Add a certification",
   args: {
+    platform: { type: GraphQLString },
     programme: { type: GraphQLNonNull(GraphQLString) },
     period: { type: GraphQLNonNull(GraphQLString) },
     certificate: { type: GraphQLNonNull(GraphQLString) },
     certification: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { programme, period, certificate, certification } = args;
 
     const certArr = [programme, period, certificate, certification];
@@ -1205,9 +1346,13 @@ const deleteCertificationById = {
   description: "Delete a certification by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req) 
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await certificationModel.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1218,18 +1363,24 @@ const updateCertificationById = {
   description: "Update a certification by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     programme: { type: GraphQLString },
     period: { type: GraphQLString },
     certificate: { type: GraphQLString },
     certification: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const updateRecord = Object.keys(args)
-.filter((key) => args[key] != null && args[key] !== "")
-.reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
+      .filter((key) => args[key] != null && args[key] !== "")
+      .reduce((cur, key) => {
+        return Object.assign(cur, { [key]: args[key] });
+      }, {});
 
-const recordCount = Object.keys(updateRecord);
+    const recordCount = Object.keys(updateRecord);
 
     if (recordCount.length < 2 || recordCount === null) {
       throw new GraphQLError(
@@ -1261,11 +1412,15 @@ const addHobby = {
   type: hobby,
   description: "Add a hobby",
   args: {
+    platform: { type: GraphQLString },
     name: { type: GraphQLNonNull(GraphQLString) },
     description: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const { name, description } = args;
 
     const hobbyArr = [name, description];
@@ -1300,9 +1455,13 @@ const deleteHobbyById = {
   description: "Delete a hobby by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const result = await hobby.findByIdAndDelete(args.id);
     return mutationConvertDate(result);
   },
@@ -1313,23 +1472,28 @@ const updateHobbyById = {
   description: "Update a hobby by Id",
   args: {
     id: { type: GraphQLNonNull(GraphQLID) },
+    platform: { type: GraphQLString },
     name: { type: GraphQLString },
     description: { type: GraphQLString },
   },
-  resolve: async (_, args, {req}) => {
-   await loginAuth(req)
+  resolve: async (_, args, { req }) => {
+    const platform = args.platform;
+    console.log(platform);
+    // Validating user Authorization Code
+    await loginAuth(req, platform);
     const updateRecord = Object.keys(args)
-    .filter((key) => args[key] != null && args[key] !== "")
-    .reduce((cur, key) => { return Object.assign(cur, { [key]: args[key] })}, {});
-    
+      .filter((key) => args[key] != null && args[key] !== "")
+      .reduce((cur, key) => {
+        return Object.assign(cur, { [key]: args[key] });
+      }, {});
+
     const recordCount = Object.keys(updateRecord);
-    
-        if (recordCount.length < 2 || recordCount === null) {
-          throw new GraphQLError(
-            `No update data provided, Kindly provide atleast one data to update `
-          );
-        }
-    
+
+    if (recordCount.length < 2 || recordCount === null) {
+      throw new GraphQLError(
+        `No update data provided, Kindly provide atleast one data to update `
+      );
+    }
 
     const result = await hobby.findByIdAndUpdate(
       args.id,
