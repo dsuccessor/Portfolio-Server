@@ -1,0 +1,41 @@
+{
+    "roles": [
+        {
+            "name": "student",
+            "permission": [
+                "view_port_records",
+                "update_port_records",
+                "delete_port_records",
+                "create_port_record",
+                "create_user_record"
+            ]
+        },
+        {
+            "name": "admin",
+            "permission": [
+                "login",
+                "view_admin_records",
+                "update_admin_records",
+                "delete_admin_records",
+                "create_admin_records",
+                "view_port_records",
+                "delete_port_records"
+            ]
+        },
+        {
+            "name": "Super_Admin",
+            "permission": [
+                "login",
+                "view_admin_records",
+                "update_admin_records",
+                "delete_admin_records",
+                "create_admin_records",
+                "view_port_records",
+                "update_port_records",
+                "delete_port_records",
+                "create_port_record",
+                "create_user_record"
+            ]
+        }
+    ]
+}

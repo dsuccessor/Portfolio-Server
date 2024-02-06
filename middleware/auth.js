@@ -113,7 +113,16 @@ const validateLogin = async (args, next) =>{
         // Checking if user provide the needed info
         if (!args) {
             console.log("Email and Password must be provided to Login");
-            throw new GraphQLError("Email and Password must be provided to Login")
+            //throw new GraphQLError("Email and Password must be provided to Login")
+            return {
+                status: "Failed",
+                errors: {
+                  errorCode: "02",
+                  errorMessage: "Email and Password must be provided to Login",
+                  errorDescription: "Error while acting on args provided",
+                  errorLocation: "Args error on validateLogin"
+                }
+            }
           }
 
       const result = await userModel?.findOne({
@@ -123,9 +132,12 @@ const validateLogin = async (args, next) =>{
   
       if (result?.length < 1 || result == null) {
         console.log(`Admin with ${args.email} and ${args.password} does not exist, Kindly check and try again`);
-        throw new GraphQLError(
-          `Admin with ${args.email} and ${args.password} does not exist, Kindly check and try again`
-        );
+        // throw new GraphQLError(
+        //   `Admin with ${args.email} and ${args.password} does not exist, Kindly check and try again`
+        // );
+
+        return false
+
       }
 
       return result;

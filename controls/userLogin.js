@@ -8,11 +8,13 @@ const {
   GraphQLInputObjectType,
   GraphQLNonNull,
   Token,
+  GraphQLUnionType,
 } = require("graphql");
 
 const userModel = require("../models/usersModel");
 const { sendMail } = require("../service/mailService");
 const otpGenerator = require("otp-generator");
+const confirmPermission = require("../middleware/rolesAndPermissions")
 const { json } = require("express");
 const { default: mongoose } = require("mongoose");
 const { auth, closeSession, createPassResetAuth, createLoginAuth, validateLogin } = require('../middleware/auth');
@@ -50,6 +52,44 @@ const login = new GraphQLObjectType({
     token: { type: GraphQLString },
   }),
 });
+
+// Error Type
+
+const errorType = new GraphQLObjectType({
+  name: "errorType",
+  description: "Error Type",
+  fields: ()=>({
+    errorCode: {type: GraphQLString},
+    errorMessage: {type: GraphQLString},
+    errorDescription: {type: GraphQLString},
+    errorLocation: {type: GraphQLString}
+  })
+})
+
+// Error Type
+const error = new GraphQLObjectType({
+  name: "error",
+  description: "Error Payload",
+  fields: ()=>({
+    status: {type: GraphQLString},
+    errors: {type: errorType}
+  })
+})
+
+const loginPayload = new GraphQLUnionType({
+  name: "loginPayload",
+  description: "union type for both Login & Its error",
+  types: [login, error],
+  resolveType(value){
+    if(value.status === "Failed"){
+      return error
+    }
+    if(value.id){
+      return login
+    }
+  }
+  
+})
 
 //Login Output Table Structure
 const otpTable = new GraphQLObjectType({
@@ -95,28 +135,55 @@ const convertDate = (data) => {
 };
 
 const validateUser = {
-  type: login,
+  type: loginPayload,
   description: "Api for validating admin user and login attempt",
   args: {
     email: { type: GraphQLNonNull(GraphQLString) },
     password: { type: GraphQLNonNull(GraphQLString) },
   },
-  resolve: async (_, args, { req, res }) => {
+  resolve: async (_, args, {req, res, next}) => {
 
     const result = await validateLogin(args)
+
+    if (result === false) {
+  
+     return  {
+      status: "Failed",
+      errors: {
+        errorCode: "03",
+        errorMessage: `Admin with ${args.email} and ${args.password} does not exist, Kindly check and try again`,
+        errorDescription: "Error while trying to confirm login credential on login db",
+        errorLocation: "querying login DB on validateLogin"
+      }
+  }
+    }
 
     const loginToken = await createLoginAuth(args)
 
     if (!loginToken) {
-      throw new GraphQLError("Unable to create Authorization key for user")
+      //throw new GraphQLError("Unable to create Authorization key for user")
+      return {
+        status: "Failed",
+        errors: {
+          errorCode: "01",
+          errorMessage: "Unable to create Authorization key for user",
+          errorDescription: "Having issue generating Auth Key",
+          errorLocation: "createLoginAuth"
+        }
     }
-
+    }
+   
     const response = convertDate(result);
+
+    const cp = await confirmPermission("login", response.role, req, next);
+
     response.token = loginToken
     res.header("auth-token", loginToken)
     return response;
   },
 };
+
+
 
 const passResetReq = {
   type: login,

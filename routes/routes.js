@@ -173,9 +173,9 @@ const schema = new GraphQLSchema({
   mutation: rootMutation,
 });
 
-const portfolioRoute = expressGraphQL((req, res) => ({
+const portfolioRoute = expressGraphQL((req, res, next) => ({
   schema: schema,
-  context: {req, res},
+  context: {req, res, next},
   graphiql: true,
 }));
 
